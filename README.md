@@ -33,3 +33,7 @@ frontend:
 Nas si UI.
 Html, css jquery, jquery ui
 
+referencias
+https://couchpota.to/
+http://sickbeard.com/
+https://sickrage.tv

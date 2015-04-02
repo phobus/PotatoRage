@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys, time
-from daemon import Daemon
+from lib.daemon import Daemon
 
 class MyDaemon(Daemon):
 	def run(self):

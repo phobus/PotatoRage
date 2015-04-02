@@ -37,3 +37,8 @@ referencias
 https://couchpota.to/
 http://sickbeard.com/
 https://sickrage.tv
+
+doc
+http://www.fullstackpython.com/bottle.html
+
+

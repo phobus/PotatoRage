@@ -1,1 +1,11 @@
-#import lib.bottle.bottle
+MY_FULLNAME = None
+MY_NAME = None
+
+PROG_DIR = '.'
+DATA_DIR = ''
+
+MY_ARGS = []
+
+DAEMON = None
+CREATEPID = False
+PIDFILE = ''

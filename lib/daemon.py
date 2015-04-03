@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 
-import sys, os, time, atexit
-from signal import SIGTERM 
+try:
+    import os
+    import sys
+    import time
+    import atexit
+    from signal import SIGTERM
+except StandardError, e:
+    import sys
+    print "Error while loading libraries: "
+    print e
+    sys.exit()
 
 class Daemon:
 	"""

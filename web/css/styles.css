@@ -1,0 +1,79 @@
+html, body {
+	margin: 0px;
+	padding: 0px;
+}
+
+h1, h2 {
+	margin: 0px;
+}
+
+#wrapper {
+	background: #fff;
+	color: #555;
+}
+
+#header, #navigation li a, #content, #footer {
+	padding: 16px;
+}
+
+#header {
+	background: #111;
+}
+
+#header img {
+	float: left;
+	margin: 0 16px 0 -2px;
+}
+
+#header h1 {
+	margin: 0;
+	color: #383;
+}
+
+#navigation {
+	float: left;
+	width: 100%;
+	background: #333;
+}
+
+#navigation ul {
+	margin: 0;
+	padding: 0;
+}
+
+#navigation ul li {
+	list-style-type: none;
+	display: inline;
+}
+
+#navigation li a {
+	display: block;
+	float: left;
+	color: #fff;
+	text-decoration: none;
+	border-right: 1px solid #fff;
+}
+
+#navigation li a:hover {
+	background: #383;
+}
+
+#navigation #donate{
+	float: right;
+	margin: 12px 12px 0 0;
+}
+
+#content {
+	clear: left;
+}
+
+#content h2 {
+	color: #000;
+	font-size: 160%;
+}
+
+#footer {
+	background: #ccc;
+	text-align: right;
+	height: 1%;
+}

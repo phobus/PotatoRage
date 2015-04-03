@@ -33,8 +33,8 @@ def main():
     print 'DAEMON: %s' % potatorage.DAEMON
     print 'CREATEPID: %s' % potatorage.CREATEPID
     
-    server = WebServer(host='127.0.0.1', port=8080)
-    server.start()
+    webServer = WebServer()
+    webServer.run(host='127.0.0.1', port=8080)
 
 if __name__ == "__main__":
     main()

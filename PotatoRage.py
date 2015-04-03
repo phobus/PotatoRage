@@ -12,16 +12,9 @@ import logging
 import getopt
 import time
 
-from lib.daemon import Daemon
-
 import potatorage
 from potatorage.webserver import  WebServer
 # from potatorage.core.logger import PRLog
-
-class MyDaemon(Daemon):
-    def run(self):
-        while True:
-            time.sleep(1)
 
 class Loader:
     def __init__(self):
@@ -56,15 +49,12 @@ class Loader:
         self.logger.addHandler(fh)
         self.logger.addHandler(ch)
         
+        self.logger.info("initPid %s" % os.getpid())
         self.logger.info("runAsDaemon %s" % self.runAsDaemon)
         self.logger.info("pidFile %s" % self.pidFile)
         
     def help_message(self):
         return "Usage: TO DO"
-    
-    def run(self):
-        while True:
-            time.sleep(1)
             
     def onInit(self): 
         myFullName = os.path.normpath(os.path.abspath(__file__))
@@ -115,21 +105,6 @@ class Loader:
             # Specify folder to load the config file from
             if o in ('--config',):
                 self.configFile = os.path.abspath(a)
-
-        # The pidFile is only useful in daemon mode, make sure we can write the file properly
-        if self.createPid:
-            if self.runAsDaemon:
-                pid_dir = os.path.dirname(self.pidFile)
-                if not os.access(pid_dir, os.F_OK):
-                    sys.exit("PID dir: " + pid_dir + " doesn't exist. Exiting.")
-                if not os.access(pid_dir, os.W_OK):
-                    sys.exit("PID dir: " + pid_dir + " must be writable (write permissions). Exiting.")
-
-            else:
-                # if self.consoleLogging:
-                sys.stdout.write("Not running in daemon mode. PID file creation disabled.\n")
-
-                self.createPid = False
         
         # If they don't specify a config file then put it in the data dir
         if not self.configFile:
@@ -154,6 +129,21 @@ class Loader:
                 raise SystemExit(
                     "Config file root dir '" + os.path.dirname(self.configFile) + "' must be writeable.")
 
+        # The pidFile is only useful in daemon mode, make sure we can write the file properly
+        if self.createPid:
+            if self.runAsDaemon:
+                pid_dir = os.path.dirname(self.pidFile)
+                if not os.access(pid_dir, os.F_OK):
+                    sys.exit("PID dir: " + pid_dir + " doesn't exist. Exiting.")
+                if not os.access(pid_dir, os.W_OK):
+                    sys.exit("PID dir: " + pid_dir + " must be writable (write permissions). Exiting.")
+
+            else:
+                # if self.consoleLogging:
+                sys.stdout.write("Not running in daemon mode. PID file creation disabled.\n")
+
+                self.createPid = False
+                
         os.chdir(self.dataDir)
         
         # Get PID
@@ -168,10 +158,10 @@ class Loader:
     def daemonize(self):
         if self.runAsDaemon:
             try:
-                # from daemon import Daemon
-                self.logger.info('daemonize')
+                from lib.daemon import Daemon
                 self.daemon = Daemon(self.pidFile)
                 self.daemon.daemonize()
+                self.logger.info("daemonize pid %s" % os.getpid())
             except SystemExit:
                 raise
             except:

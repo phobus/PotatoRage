@@ -10,12 +10,9 @@ import signal
 import logging
 
 import getopt
-import time
 
-import potatorage
-from potatorage.webserver import  WebServer
-# from potatorage.core.logger import PRLog
-
+from potatorage.potatorage import PotatoRage
+ 
 class Loader:
     def __init__(self):
         self.configFile = None
@@ -27,16 +24,18 @@ class Loader:
         self.pidFile = None
         self.daemon = None
         
-        self.webHost = '0.0.0.0'
+
         self.webPort = '8080'
 
-        self.onInit()
+        self.loadParam()
+        self.setup()
         
-        # create logger with 'spam_application'
+        self.logFile = os.path.join(self.dataDir, 'potatorage.log')
+        # create logger'
         self.logger = logging.getLogger('potatorage')
         self.logger.setLevel(logging.DEBUG)
         # create file handler which logs even debug messages
-        fh = logging.FileHandler(os.path.join(self.dataDir, 'potatorage.log'))
+        fh = logging.FileHandler(self.logFile)
         fh.setLevel(logging.DEBUG)
         # create console handler with a higher log level
         ch = logging.StreamHandler()
@@ -51,12 +50,12 @@ class Loader:
         
         self.logger.info("initPid %s" % os.getpid())
         self.logger.info("runAsDaemon %s" % self.runAsDaemon)
-        self.logger.info("pidFile %s" % self.pidFile)
+        self.logger.info("pidFile %s" % self.pidFile)       
         
-    def help_message(self):
+    def helpMessage(self):
         return "Usage: TO DO"
             
-    def onInit(self): 
+    def loadParam(self): 
         myFullName = os.path.normpath(os.path.abspath(__file__))
         
         self.progDir = os.path.dirname(myFullName)
@@ -71,7 +70,7 @@ class Loader:
                                        ['help', 'daemon', 'port=',
                                         'pidfile=', 'datadir=', 'config='])
         except getopt.GetoptError:
-            sys.exit(self.help_message())
+            sys.exit(self.helpMessage())
             
         for o, a in opts:
             # Prints help message
@@ -105,7 +104,8 @@ class Loader:
             # Specify folder to load the config file from
             if o in ('--config',):
                 self.configFile = os.path.abspath(a)
-        
+    
+    def setup(self):   
         # If they don't specify a config file then put it in the data dir
         if not self.configFile:
             self.configFile = os.path.join(self.dataDir, "config.ini")
@@ -141,25 +141,20 @@ class Loader:
             else:
                 # if self.consoleLogging:
                 sys.stdout.write("Not running in daemon mode. PID file creation disabled.\n")
-
                 self.createPid = False
                 
         os.chdir(self.dataDir)
-        
-        # Get PID
-        # sickbeard.PID = os.getpid()
-        
-        # self.startWebServer()
-        
-        # main loop
-        # while (True):
-            # time.sleep(1)
             
     def daemonize(self):
         if self.runAsDaemon:
             try:
+                # set session ID to this process so we can kill group in sigterm handler
+                # os.setsid()
                 from lib.daemon import Daemon
-                self.daemon = Daemon(self.pidFile)
+                self.daemon = Daemon(self.pidFile,
+                                    stdin=self.logFile,
+                                    stdout=self.logFile,
+                                    stderr=self.logFile)
                 self.daemon.daemonize()
                 self.logger.info("daemonize pid %s" % os.getpid())
             except SystemExit:
@@ -169,30 +164,24 @@ class Loader:
             
     def run(self):
         self.addSignals()
-        self.startWebServer()
-        
-    def addSignals(self):
-        signal.signal(signal.SIGINT, self.onExit)
-        signal.signal(signal.SIGTERM, lambda signum, stack_frame: sys.exit(1))
+        PotatoRage(self.dataDir, self.webPort)       
 
-        # from couchpotato.core.event import addEvent
-        # addEvent('app.do_shutdown', self.setRestart)
-    
+    def addSignals(self):
+        # Control+C
+        signal.signal(signal.SIGINT, self.onExit)
+        
+        # stop
+        signal.signal(signal.SIGTERM, self.onExit)
+        
     def onExit(self, signal, frame):
-        # from couchpotato.core.event import fireEvent
-        # fireEvent('app.shutdown', single = True)
-        print "signal%s frame%s"
-                          
-    def startWebServer(self):
-        webServer = WebServer(self.progDir)
-        webServer.run(host=self.webHost, port=self.webPort)
-    
+        self.logger.info("stop")
+        sys.exit(1)        
     
 if __name__ == "__main__":
     l = None
-    #try:
+    # try:
     l = Loader()
     l.daemonize()
     l.run()
-    #except:
+    # except:
     #    raise

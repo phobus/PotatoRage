@@ -23,12 +23,14 @@ OPTS="--daemon --pidfile=$RC_PIDFILE --config=$CONFF --datadir=$DATA_DIR"
 
 start_potatorage() {
     echo "Starting $DESC"
-    start-stop-daemon -d $PROG_DIR --start --pidfile $RC_PIDFILE --exec $DAEMON -- $PROG $OPTS
+    #start-stop-daemon -d $PROG_DIR --start --pidfile $RC_PIDFILE --exec $DAEMON -- $PROG $OPTS
+    python $PROG $OPTS --start
 }
 
 stop_potatorage() {
     echo "Stopping $DESC"
-    start-stop-daemon --stop --pidfile $RC_PIDFILE --retry 15
+    #start-stop-daemon --stop --pidfile $RC_PIDFILE --retry 15
+    python $PROG $OPTS --stop
 }
 
 case "$1" in
@@ -40,12 +42,10 @@ case "$1" in
         ;;
 
     restart|force-reload)
-        stop_potatorage
-        sleep 2
-        start_potatorage
+        python $PROG $OPTS --restart
         ;;
     status)
-        status_of_proc -p "$RC_PIDFILE" "$DAEMON" "$DESC"
+        python $PROG $OPTS --status
         ;;
     *)
         N=/etc/init.d/$NAME

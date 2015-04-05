@@ -21,6 +21,7 @@ sql, nosql, xml, json ...
 
 python daemon:
 doble fork:
+https://github.com/serverdensity/python-daemon/blob/master/daemon.py
 http://www.jejik.com/articles/2007/02/a_simple_unix_linux_daemon_in_python/
 
 paquete:

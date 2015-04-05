@@ -6,19 +6,18 @@
 
 # from potatorage.ui import Notifications
 import os
-import json
 
-from lib.bottle.bottle import Bottle, route, run, template, request, static_file, error
+from lib.bottle import Bottle, route, run, template, request, static_file, error
 
 from ui import Notifications, Notification
 
 class WebServer(Bottle):
-    def __init__(self, progDir):
+    def __init__(self, progDir, api):
         super(WebServer, self).__init__()
-        self.notifications = None
+        self.api = api
         
         self.webRoot = os.path.join(progDir, 'web')
-       
+
         self.index = 'index.html'
         self.cssFolder = os.path.join(self.webRoot, 'css')
         self.jsFolder = os.path.join(self.webRoot, 'js')
@@ -47,5 +46,7 @@ class WebServer(Bottle):
         return static_file(filepath, root=self.imgFolder)
 
     def _notifications(self):
-        #return "%s" % self.notifications.get_notifications()[0].title
-        return "notifications %s" % len(self.notifications.get_notifications())
+        return self.api.getNotifications()
+    
+    def handle_terminate(self):
+        os.kill(os.getpid(), signal.SIGTERM)

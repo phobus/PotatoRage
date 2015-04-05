@@ -93,10 +93,10 @@ class Daemon(object):
             os.dup2(so.fileno(), sys.stdout.fileno())
             os.dup2(se.fileno(), sys.stderr.fileno())
 
-        def sigtermhandler(signum, frame):
-            self.daemon_alive = False
-            signal.signal(signal.SIGTERM, sigtermhandler)
-            signal.signal(signal.SIGINT, sigtermhandler)
+        #def sigtermhandler(signum, frame):
+        #    self.daemon_alive = False
+        #    signal.signal(signal.SIGTERM, sigtermhandler)
+        #    signal.signal(signal.SIGINT, sigtermhandler)
 
         if self.verbose >= 1:
             print "Started"

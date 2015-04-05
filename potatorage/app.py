@@ -4,11 +4,12 @@
 import threading
 import time
 from ui import Notifications, Notification
-from webserver import WebServer
+from webserver import PRBottle, MyWSGIRefServer
 from api import api
 
 class PotatoRage:
-    def __init__(self, home_dir, data_dir, host, port):
+    def __init__(self, daemon, home_dir, data_dir, host, port):
+        self.daemon = daemon
         self.home_dir = home_dir
         self.data_dir = data_dir
         
@@ -19,28 +20,22 @@ class PotatoRage:
         self.notifications = Notifications()
         self.api = api(self.notifications)
         
-        self.webServer = WebServer(self.home_dir, self.api)
-
-        # self.webServer.run(host=self.webHost, port=self.webPort, quiet=False, debug=None)
-        # self.webServer.run(host=self.webHost, port=self.webPort)
+        self.worker = threading.Thread(target=self.work);
+        self.worker.start()
         
-        self.webWorker = threading.Thread(
-                                    target=self.webServer.run,
-                                    kwargs=dict(host=self.host, port=self.port)
-                                    )
-        self.webWorker.start()
-        #t = threading.Thread(target=self.work);
-        #t.start()
-        while True:
-            pass
+        self.bottle = PRBottle(self.home_dir, self.api)
+        self.server = MyWSGIRefServer(host=self.host, port=self.port)
+        self.bottle.run(server=self.server)
         
     def start(self):
         self.webServer.run(host=self.webHost, port=self.webPort)
         
     def work(self):
         i = 0
-        while True:
-            pass
-            #self.notifications.message("mensaje %s" % i, 'q ase?')
-            #i += 1
-            #time.sleep(1)
+        while self.daemon.daemon_alive:
+            print self.daemon.daemon_alive
+            time.sleep(1)
+            # self.notifications.message("mensaje %s" % i, 'q ase?')
+            # i += 1
+            # time.sleep(1)
+        self.server.stop()

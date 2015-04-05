@@ -7,13 +7,29 @@
 # from potatorage.ui import Notifications
 import os
 
-from lib.bottle import Bottle, route, run, template, request, static_file, error
+from lib.bottle import Bottle, ServerAdapter
 
 from ui import Notifications, Notification
 
-class WebServer(Bottle):
+class MyWSGIRefServer(ServerAdapter):
+    #server = None
+
+    def run(self, handler):
+        from wsgiref.simple_server import make_server, WSGIRequestHandler
+        if self.quiet:
+            class QuietHandler(WSGIRequestHandler):
+                def log_request(*args, **kw): pass
+            self.options['handler_class'] = QuietHandler
+        self.server = make_server(self.host, self.port, handler, **self.options)
+        self.server.serve_forever()
+
+    def stop(self):
+        # self.server.server_close() <--- alternative but causes bad fd exception
+        self.server.shutdown()
+        
+class PRBottle(Bottle):
     def __init__(self, progDir, api):
-        super(WebServer, self).__init__()
+        super(PRBottle, self).__init__()
         self.api = api
         
         self.webRoot = os.path.join(progDir, 'web')
@@ -47,6 +63,3 @@ class WebServer(Bottle):
 
     def _notifications(self):
         return self.api.getNotifications()
-    
-    def handle_terminate(self):
-        os.kill(os.getpid(), signal.SIGTERM)

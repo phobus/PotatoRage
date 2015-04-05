@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from indexer.thetvdb import TheTvDb
+
 class api:
     RESULT_SUCCESS = 10  # only use inside the run methods
     RESULT_FAILURE = 20  # only use inside the run methods
@@ -19,7 +21,8 @@ class api:
     
     def __init__(self, notifications):
         self.notifications = notifications
-    
+        self.tvDb = TheTvDb()
+        
     def getNotifications(self):
         messages = []
         for cur_notification in self.notifications.get_notifications():
@@ -28,6 +31,10 @@ class api:
                            "type": cur_notification.type})
         return self._responds(api.RESULT_SUCCESS, messages)
     
+    def getSeriesFromTheTvDb(self, seriesname):
+        dict = self.tvDb.search(seriesname)
+        return self._responds(api.RESULT_SUCCESS, dict)
+        
     def _responds(self, result_type, data=None, msg=""):
         """
         result is a string of given "type" (success/failure/timeout/error)

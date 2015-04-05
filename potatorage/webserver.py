@@ -7,12 +7,12 @@
 # from potatorage.ui import Notifications
 import os
 
-from lib.bottle import Bottle, ServerAdapter
+from lib.bottle import Bottle, ServerAdapter, static_file, request
 
 from ui import Notifications, Notification
 
 class MyWSGIRefServer(ServerAdapter):
-    #server = None
+    # server = None
 
     def run(self, handler):
         from wsgiref.simple_server import make_server, WSGIRequestHandler
@@ -48,6 +48,8 @@ class PRBottle(Bottle):
         self.route('/img/<filepath:path>', callback=self._static_img)
         # notifications
         self.route('/notifications', callback=self._notifications)
+        # notifications
+        self.route('/api/GetSeries/<seriesname>', callback=self._getSeries)
         
     def _index(self):
         return static_file(self.index, root=self.webRoot)
@@ -63,3 +65,9 @@ class PRBottle(Bottle):
 
     def _notifications(self):
         return self.api.getNotifications()
+    
+    def _getSeries(self, seriesname):
+        print seriesname
+        #r = requests.get('http://thetvdb.com/api/GetSeries.php?language=es&seriesname=' + seriesname)
+        #return r.content
+        return self.api.getSeriesFromTheTvDb(seriesname)

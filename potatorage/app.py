@@ -21,7 +21,7 @@ class PotatoRage:
         self.api = api(self.notifications)
         
         self.worker = threading.Thread(target=self.work);
-        self.worker.start()
+        #self.worker.start()
         
         self.bottle = PRBottle(self.home_dir, self.api)
         self.server = MyWSGIRefServer(host=self.host, port=self.port)

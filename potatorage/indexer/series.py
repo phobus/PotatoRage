@@ -33,8 +33,9 @@ class TheTvDb:
         for series in et:
             result = {}
             for item in series:
-                if item.tag in ['seriesid', 'language', 'SeriesName', 'Network']:
-                    result[item.tag.lower()] = item.text
+                tag = item.tag.lower()
+                if tag in ['seriesid', 'language', 'seriesname', 'network']:
+                    result[tag] = item.text
             result['seriesid'] = int(result['seriesid'])
             allSeries.append(result)
         return allSeries

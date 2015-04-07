@@ -62,10 +62,26 @@ def _api_series_search():
     return r
 
 @app.route('/api/series/info')
-def _api_series_search():
+def _api_series_info():
     #try:
     sid = request.query.sid
     r = result(RESULT_SUCCESS, indexer_series.info(sid))
     #except Exception, error:
     #    r = result(RESULT_ERROR, None, "Exception:%s e:%s" % (Exception, error))
     return r
+
+"""class MyWSGIRefServer(ServerAdapter):
+    # server = None
+
+    def run(self, handler):
+        from wsgiref.simple_server import make_server, WSGIRequestHandler
+        if self.quiet:
+            class QuietHandler(WSGIRequestHandler):
+                def log_request(*args, **kw): pass
+            self.options['handler_class'] = QuietHandler
+        self.server = make_server(self.host, self.port, handler, **self.options)
+        self.server.serve_forever()
+
+    def stop(self):
+        # self.server.server_close() <--- alternative but causes bad fd exception
+        self.server.shutdown()"""

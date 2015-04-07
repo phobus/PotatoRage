@@ -5,21 +5,23 @@ $(document).ready(function() {
 	});
 });
 
-function getSeries(seriesname) {
+function getSeries(name) {
 	var oData = {
-		seriesname : seriesname
+		name : name
 	};
 
 	var oSuccess = function(response) {
-		var output =  $('#output');
-		output.append(response.result+'</br>');
-		for(var i=0; i<response.data.length; i++){
-			output.append('</br>seriesname:</br>');
-			output.append(response.data[i].seriesname+'</br>');
-			output.append('</br>network</br>');
-			output.append(response.data[i].network+'</br>');
-			output.append('</br>overview</br>');
-			output.append(response.data[i].overview+'</br>');
+		var output = $('#output');
+		output.html(response.result + '</br>');
+		for (var i = 0; i < response.data.length; i++) {
+			output.append('</br>seriesid:');
+			output.append(response.data[i].seriesid);
+			output.append(' | seriesname:');
+			output.append(response.data[i].seriesname);
+			output.append(' | network:');
+			output.append(response.data[i].network);
+			output.append(' | language:');
+			output.append(response.data[i].language);
 		}
 	};
 

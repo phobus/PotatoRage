@@ -24,8 +24,8 @@ function getSeries(seriesname) {
 	};
 
 	$.ajax({
-		url : 'api/GetSeries/' + seriesname,
-		// data : oData,
+		url : 'api/series/search',
+		data : oData,
 		success : oSuccess
 	});
 }

@@ -4,7 +4,7 @@
 import threading
 import time
 from ui import Notifications, Notification
-from webserver import PRBottle, MyWSGIRefServer
+import webserver
 from api import api
 
 class PotatoRage:
@@ -16,8 +16,9 @@ class PotatoRage:
         self.host = host
         self.port = port
         
-        
-        self.notifications = Notifications()
+        webserver.HOME_DIR = home_dir
+        webserver.DATA_DIR = data_dir
+        """self.notifications = Notifications()
         self.api = api(self.notifications)
         
         self.worker = threading.Thread(target=self.work);
@@ -25,7 +26,7 @@ class PotatoRage:
         
         self.bottle = PRBottle(self.home_dir, self.api)
         self.server = MyWSGIRefServer(host=self.host, port=self.port)
-        self.bottle.run(server=self.server)
+        self.bottle.run(server=self.server)"""
         
     def start(self):
         self.webServer.run(host=self.webHost, port=self.webPort)

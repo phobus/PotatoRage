@@ -11,33 +11,35 @@ import logging
 
 from lib.daemon import Daemon
 
+from potatorage import setup
+
 __author__ = 'Pablo Alvao'
-__version__ = '0.1'
-__license__ = ''
+__version__ = '0.0.16'
+__license__ = 'free'
                 
 class PRDaemon(Daemon):
-    def __init__(self, daemon, pidfile, datadir, config, port, host,
+    def __init__(self, daemon, pidfile, datadir, config, host, port,
                  start, stop, restart, status):
-        self.host = host
-        self.port = port
+        setup.HOST = host
+        setup.PORT = port
         
         # home full dir
         myFullName = os.path.normpath(os.path.abspath(__file__))
-        home_dir = os.path.dirname(myFullName)
+        setup.HOME_DIR = os.path.dirname(myFullName)
         
         # check data directory
         if not datadir:
-            datadir = os.path.join(home_dir, 'data')
+            datadir = os.path.join(setup.HOME_DIR, 'data')
         self.checkFolder(datadir)
-        self.data_dir = datadir;
+        setup.DATA_DIR = datadir;
         
         # If they don't specify a config file then put it in the data dir
         if not config:
-            config = os.path.join(self.data_dir, 'config.ini')
+            config = os.path.join(setup.DATA_DIR, 'config.ini')
         self.checkFile(config)
            
         # log 
-        logfile = os.path.join(self.data_dir, 'potatorage.log')
+        logfile = os.path.join(setup.DATA_DIR, 'potatorage.log')
         self.checkFile(logfile)        
         self.createLog(logfile)
               
@@ -52,7 +54,7 @@ class PRDaemon(Daemon):
                         stdin=logfile,
                         stdout=logfile,
                         stderr=logfile,
-                        home_dir=home_dir)
+                        home_dir=setup.HOME_DIR)
         
     def createLog(self, logfile):
         self.logger = logging.getLogger('potatorage')
@@ -95,8 +97,8 @@ class PRDaemon(Daemon):
         signal.signal(signal.SIGTERM, self.sigtermhandler)
         signal.signal(signal.SIGINT, self.sigtermhandler)
         
-        from potatorage.app import PotatoRage
-        self.potatoRage = PotatoRage(self, self.home_dir, self.data_dir, self.host, self.port)
+        from potatorage import webserver
+        webserver.run()
         
 if __name__ == "__main__":
     import argparse

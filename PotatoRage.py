@@ -14,7 +14,7 @@ from lib.daemon import Daemon
 from potatorage import setup
 
 __author__ = 'Pablo Alvao'
-__version__ = '0.0.16'
+__version__ = '0.0.17'
 __license__ = 'free'
                 
 class PRDaemon(Daemon):
@@ -37,7 +37,14 @@ class PRDaemon(Daemon):
         if not config:
             config = os.path.join(setup.DATA_DIR, 'config.ini')
         self.checkFile(config)
-           
+        
+        setup.DATA_BASE = os.path.join(setup.DATA_DIR, 'potatorage.db')
+        if not os.path.isfile(setup.DATA_BASE):
+            from potatorage.database import Schema
+            Schema().createDataBase()
+            
+        setup.MEDIA_DIR = os.path.join(setup.DATA_DIR, 'media')
+        
         # log 
         logfile = os.path.join(setup.DATA_DIR, 'potatorage.log')
         self.checkFile(logfile)        

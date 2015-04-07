@@ -1,0 +1,1 @@
+#	Series Name	Genre	Status	Language	Network	Rating	

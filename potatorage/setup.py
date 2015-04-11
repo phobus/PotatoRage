@@ -1,5 +1,3 @@
-from lib.bottle import Bottle
-
 HOME_DIR = '.'
 DATA_DIR = 'data'
 STATIC_DIR = 'web'

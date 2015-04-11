@@ -3,17 +3,19 @@
 """
 
 """
-from potatorage.setup import *
-from potatorage.indexer.series import TheTvDb
-from lib.bottle import static_file, request
+from potatorage import setup
+from potatorage.setup import app
+from potatorage.indexer import indexer_search
+
+from lib.bottle import Bottle, static_file, request
 
 if not app:
     app = Bottle()
     
 def run():
-    app.run(host=HOST, port=PORT)
+    app.run(host=setup.HOST, port=setup.PORT)
 
-indexer_series = TheTvDb()
+# indexer_series = TheTvDb()
     
 @app.get('/')
 def _index():
@@ -29,17 +31,24 @@ def _send_static(filename):
 @app.get('/api/idx/series')
 def _api_get_idx_series_search():
     # try:
-    q = request.query.q
+    query = request.query.q
     # except Exception, error:
-    return {'series' :indexer_series.search(q)}
+    return indexer_search('tv', query)
 
-@app.get('/api/idx/series/<sid>')
+@app.get('/api/idx/movies')
+def _api_get_idx_movies_search():
+    # try:
+    query = request.query.q
+    # except Exception, error:
+    return indexer_search('movie', query)
+
+"""@app.get('/api/idx/series/<sid>')
 def _api_get_idx_series():
     # try:
     sid = request.query.sid
     print indexer_series.get_by_id(sid)
     # except Exception, error:
-    return indexer_series.get_by_id(sid)
+    return indexer_series.get_by_id(sid)"""
 
 
 """class MyWSGIRefServer(ServerAdapter):

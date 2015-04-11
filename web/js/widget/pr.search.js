@@ -67,20 +67,34 @@ $.widget("pr.search", {
 
 	_createHeaderRow : function() {
 		var html = '<tr class="ui-widget-header">';
-		html += '<th/>';
+		html += '<th>Id</th>';
 		html += '<th>Nombre</th>';
-		html += '<th>Cadena</th>';
-		html += '<th>Idioma</th>';
+		html += '<th>Fecha</th>';
+		html += '<th>Puntuacion</th>';
 		html += '</tr>';
 		return html;
 	},
 
-	_createRow : function(idx, data) {
+	_createRow : function(data) {
+		var title = '';
+		if (data.title) {
+			title = data.title;
+		} else if (data.name) {
+			title = data.name;
+		}
+		
+		var date = '';
+		if (data.release_date) {
+			date = data.release_date.substr(0,4);
+		} else if (data.first_air_date) {
+			date = data.first_air_date.substr(0,4);
+		}
+
 		var html = '<tr>';
-		html += '<td>' + idx + '</td>';
-		html += '<td>' + data.seriesname + '</td>';
-		html += '<td>' + data.network + '</td>';
-		html += '<td>' + data.language + '</td>';
+		html += '<td>' + data.id + '</td>';
+		html += '<td>' + title + '</td>';
+		html += '<td>' + date + '</td>';
+		html += '<td>' + data.vote_average + '</td>';
 		html += '</tr>';
 		return html;
 	},
@@ -96,8 +110,8 @@ $.widget("pr.search", {
 			success : function(data, status, jqXHR) {
 				widget.tbody.empty();
 				var rows = '';
-				for (var i = 0; i < data.series.length; i++) {
-					rows += widget._createRow(i + 1, data.series[i]);
+				for (var i = 0; i < data.results.length; i++) {
+					rows += widget._createRow(data.results[i]);
 				}
 				widget.tbody.append(rows);
 				widget.table.show();

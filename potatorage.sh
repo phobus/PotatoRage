@@ -5,8 +5,8 @@
 NAME=potatorage
 DESC=PotatoRage
 
-#PROG_DIR="${PWD}"
-PROG_DIR=/home/neganix/git/PotatoRage
+PROG_DIR="${PWD}"
+#PROG_DIR=/home/neganix/git/PotatoRage
 DATA_DIR=$PROG_DIR/data
 
 CONF_DIR=$DATA_DIR

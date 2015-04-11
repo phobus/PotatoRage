@@ -40,7 +40,7 @@ class TheTvDb:
             allSeries.append(result)
         return allSeries
 
-    def info(self, sid):
+    def get_by_id(self, sid):
         url = self.url_seriesInfo % (sid, self.language);
         for series in et:
             result = dict((k.tag.lower(), k.text) for k in series.getchildren())

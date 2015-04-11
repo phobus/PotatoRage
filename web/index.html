@@ -4,14 +4,18 @@
 
 <meta charset="utf-8">
 
-<link rel="stylesheet" type="text/css" href="/static/css/lib/jquery-ui.structure.css" />
-<link rel="stylesheet" type="text/css" href="/static/css/lib/jquery-ui.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/css/lib/jquery-ui.structure.css" />
+<link rel="stylesheet" type="text/css"
+	href="/static/css/lib/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 
 <script type="text/javascript" src="/static/js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/lib/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/js/ajaxSetup.js"></script>
 <script type="text/javascript" src="/static/js/application.js"></script>
 
+<script type="text/javascript" src="/static/js/widget/pr.search.js"></script>
 <title>Potato rage 0.1</title>
 </head>
 <body>
@@ -22,10 +26,10 @@
 		</div>
 		<div id="navigation">
 			<ul>
-				<li><a href="#">Inicio</a></li>
-				<li><a href="#">Peliculas</a></li>
-				<li><a href="#">Series</a></li>
-				<li><a href="#">Configuracion</a></li>
+				<li><a href="#" id="home">Inicio</a></li>
+				<li><a href="#" id="movies">Peliculas</a></li>
+				<li><a href="#" id="series">Series</a></li>
+				<li><a href="#" id="config">Configuracion</a></li>
 			</ul>
 			<div id="donate">
 				<form action="https://www.paypal.com/cgi-bin/webscr" method="post"
@@ -40,42 +44,11 @@
 						src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif"
 						width="1" height="1">
 				</form>
-
 			</div>
 		</div>
 
 		<div id="content">
-			<h2>Page heading</h2>
-			<p>Lorem ipsum dolor sit amet consect etuer adipi scing elit sed
-				diam nonummy nibh euismod tinunt ut laoreet dolore magna aliquam
-				erat volut. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-				ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-				consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate
-				velit esse molestie consequat, vel illum dolore eu feugiat nulla
-				facilisis at vero eros et accumsan et iusto odio dignissim qui
-				blandit praesent luptatum zzril delenit augue duis dolore te feugait
-				nulla facilisi.</p>
-			<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation
-				ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-				consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate
-				velit esse molestie consequat, vel illum dolore eu feugiat nulla
-				facilisis at vero eros et accumsan et iusto odio dignissim qui
-				blandit praesent luptatum zzril delenit augue duis dolore te feugait
-				nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing
-				elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-				magna aliquam erat volutpat.</p>
-			<p>Duis autem vel eum iriure dolor in hendrerit in vulputate
-				velit esse molestie consequat, vel illum dolore eu feugiat nulla
-				facilisis at vero eros et accumsan et iusto odio dignissim qui
-				blandit praesent luptatum zzril delenit augue duis dolore te feugait
-				nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing
-				elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-				magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis
-				nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip
-				ex ea commodo consequat.</p>
-			<input type="text" id="search-serie" /> <input type="button"
-				id="execute-search-serie" value="buscar serie" />
-				<div id="output"></div>
+			<div id="search"></div>
 		</div>
 
 		<div id="footer">Lorem ipsum dolor sit</div>

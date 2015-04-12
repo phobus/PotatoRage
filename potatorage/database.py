@@ -14,7 +14,8 @@ class Schema(object):
             "INSERT INTO db_version VALUES (%s);" % self.version,
             'CREATE TABLE indexer (indexer_id INT PRIMARY KEY, name TEXT, url TEXT, series INT, movies INT);', 
             "INSERT INTO indexer VALUES (0, 'TheTVDB','http://thetvdb.com/', 1, 0);",
-            'CREATE TABLE series (serie_id INT PRIMARY KEY, indexer_id INT, name TEXT, network TEXT);'
+            'CREATE TABLE series (serie_id INT PRIMARY KEY, indexer_id INT, name TEXT, network TEXT);',
+            'CREATE TABLE movies (movie_id INT PRIMARY KEY, imdb_id INT, indexer_id INT, title TEXT, network TEXT);'
             ]
         con = sqlite3.connect(DATA_BASE)
         #con = sqlite3.connect(':memory:')

@@ -4,31 +4,38 @@
 
 <meta charset="utf-8">
 
-<link rel="stylesheet" type="text/css"
-	href="/static/css/lib/jquery-ui.structure.css" />
-<link rel="stylesheet" type="text/css"
-	href="/static/css/lib/jquery-ui.css" />
-<link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+<link rel="stylesheet" type="text/css" href="/st/css/lib/jquery-ui.structure.css" />
+<link rel="stylesheet" type="text/css" href="/st/css/lib/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="/st/css/styles.css">
+<link rel="stylesheet" type="text/css" href="/st/css/widget.css">
 
-<script type="text/javascript" src="/static/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="/static/js/lib/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/static/js/ajaxSetup.js"></script>
-<script type="text/javascript" src="/static/js/application.js"></script>
+<script type="text/javascript" src="/st/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="/st/js/lib/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/st/js/ajaxSetup.js"></script>
 
-<script type="text/javascript" src="/static/js/widget/pr.search.js"></script>
+<script type="text/javascript" src="/st/js/plugin/rating.js"></script>
+
+<script type="text/javascript" src="/st/js/widget/pr.search.js"></script>
+<script type="text/javascript" src="/st/js/widget/pr.movie.js"></script>
+
+<script type="text/javascript" src="/st/js/application.js"></script>
+
+
+
 <title>Potato rage 0.1</title>
+
 </head>
 <body>
 	<div id="wrapper" class="ui-widget">
 		<div id="header">
-			<img alt="" src="/static/img/rp.png">
+			<img alt="" src="/st/img/rp.png">
 			<h1>Potato rage</h1>
 		</div>
 		<div id="navigation">
 			<ul>
 				<li><a href="#" id="home">Inicio</a></li>
-				<li><a href="#" id="movies">Peliculas</a></li>
-				<li><a href="#" id="series">Series</a></li>
+				<li><a href="#" id="movie">Peliculas</a></li>
+				<li><a href="#" id="serie">Series</a></li>
 				<li><a href="#" id="config">Configuracion</a></li>
 			</ul>
 			<div id="donate">
@@ -48,10 +55,12 @@
 		</div>
 
 		<div id="content">
+			<h2 id="section"></h2>
 			<div id="search"></div>
+			<div id="show-movie"></div>
 		</div>
 
-		<div id="footer">Lorem ipsum dolor sit</div>
+		<div id="footer"></div>
 	</div>
 </body>
 </html>

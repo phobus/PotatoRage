@@ -5,7 +5,7 @@
 """
 from potatorage import setup
 from potatorage.setup import app
-from potatorage.indexer import indexer_search
+from potatorage.indexer.themoviedb import TheMovieDb
 
 from lib.bottle import Bottle, static_file, request
 
@@ -19,37 +19,40 @@ def run():
     
 @app.get('/')
 def _index():
-    return static_file(INDEX, root=STATIC_DIR)
+    return static_file(setup.INDEX, root=setup.STATIC_DIR)
     
-@app.get('/static/<filename:path>')
+@app.get('/st/<filename:path>')
 def _send_static(filename):
-    return static_file(filename, root=STATIC_DIR)
+    return static_file(filename, root=setup.STATIC_DIR)
 
 # rest api
 # indexer
 
-@app.get('/api/idx/series')
-def _api_get_idx_series_search():
+@app.get('/api/idx/movie')
+def _idx_search_movies():
     # try:
     query = request.query.q
     # except Exception, error:
-    return indexer_search('tv', query)
+    return TheMovieDb().search_movies(query)
 
-@app.get('/api/idx/movies')
-def _api_get_idx_movies_search():
+@app.get('/api/idx/movie/<id>')
+def _idx_get_movie(id):
+    # try:
+    # except Exception, error:
+    return TheMovieDb().get_movie(id)
+
+@app.get('/api/idx/serie')
+def _idx_search_serie():
     # try:
     query = request.query.q
     # except Exception, error:
-    return indexer_search('movie', query)
+    return TheMovieDb().search_series(query)
 
-"""@app.get('/api/idx/series/<sid>')
-def _api_get_idx_series():
+@app.get('/api/idx/serie/<id>')
+def _idx_get_serie(id):
     # try:
-    sid = request.query.sid
-    print indexer_series.get_by_id(sid)
     # except Exception, error:
-    return indexer_series.get_by_id(sid)"""
-
+    return TheMovieDb().get_serie(id)
 
 """class MyWSGIRefServer(ServerAdapter):
     # server = None

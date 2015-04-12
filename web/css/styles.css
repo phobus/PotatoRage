@@ -8,12 +8,13 @@ h1, h2 {
 }
 
 #wrapper {
-	background: #fff;
-	color: #555;
+	width: 80%;
+	min-width: 530px;
+	margin: 0 auto;
 }
 
-#header, #navigation li a, #content, #footer {
-	padding: 16px;
+#header, #content, #footer {
+	padding: 8px 16px;
 }
 
 #header {
@@ -52,18 +53,20 @@ h1, h2 {
 	color: #fff;
 	text-decoration: none;
 	border-right: 1px solid #fff;
+	padding: 8px 16px;
 }
 
 #navigation li a:hover {
 	background: #383;
 }
 
-#navigation #donate{
+#navigation #donate {
 	float: right;
-	margin: 12px 12px 0 0;
+	margin: 5px 16px 0 0;
 }
 
 #content {
+	font-size: 80%;
 	clear: left;
 }
 
@@ -76,4 +79,25 @@ h1, h2 {
 	background: #ccc;
 	text-align: right;
 	height: 1%;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table tbody tr {
+	border: 0px !important;
+}
+
+table th {
+	padding: 8px;
+}
+
+table td {
+	padding: 4px 8px;
+}
+
+tr:nth-child(even) {
+	background: #EEE;
 }

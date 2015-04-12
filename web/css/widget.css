@@ -24,8 +24,20 @@ span.stars span {
 }
 
 /**** pr-show-media ****/
+.pr-show-media {
+	position: relative;
+}
+
 .pr-show-media, .pr-show-media .panel-rating {
 	overflow: hidden;
+}
+
+.pr-show-media .panel-title {
+	margin: 0 0 2px 0;
+}
+
+.pr-show-media .panel-rating {
+	margin: 0 0 16px 0;
 }
 
 .pr-show-media img {
@@ -34,14 +46,33 @@ span.stars span {
 	margin: 0 16px 0 0;
 }
 
-.pr-show-media .stars {
-	float: left;
-}
-
 .pr-show-media h3 {
 	display: inline;
+	margin: 0 8px 8px 0;
 }
 
 .pr-show-media .panel-data a {
 	display: block;
+}
+
+.pr-show-media .panel-links {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+/**** pr-show-media ****/
+.pr-icon {
+	height: 16px;
+	width: 16px;
+	float: right;
+	margin: 0 0 0 4px;
+}
+
+.icon-imdb {
+	background-image: url("../img/imdb_small.png");
+}
+
+.icon-tmdb {
+	background-image: url("../img/themoviedb.png");
 }

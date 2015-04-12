@@ -45,6 +45,7 @@
 				'click tr' : function(event) {
 					var currentTarget = $(event.currentTarget);
 					this._trigger("selectedMedia", event, {
+						type : this.options.type,
 						id : currentTarget.data('id')
 					});
 				}

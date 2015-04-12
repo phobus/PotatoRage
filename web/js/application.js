@@ -1,12 +1,12 @@
 $(document).ready(function() {
 	'use strict';
 	$('#search').search();
-	$('#show-movie').movie();
+	$('#show-movie').showMedia();
 
 	$('#navigation a').click(function() {
 		$('#section').text(this.text);
 		$('#search').search('clear');
-		$('#show-movie').movie('clear');
+		$('#show-movie').showMedia('clear');
 
 		if (this.id == 'home') {
 
@@ -15,7 +15,7 @@ $(document).ready(function() {
 		} else if (this.id == 'serie') {
 			$('#search').search('option', 'type', this.id).show();
 		} else if (this.id == 'config') {
-			
+
 		}
 
 		return false;
@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 	$('#search').search({
 		selectedMedia : function(event, data) {
-			$('#show-movie').movie('option', 'id', data.id);
+			$('#show-movie').showMedia('loadData', data.type, data.id);
 			$('#search').hide();
 		}
 	});

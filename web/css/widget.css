@@ -11,6 +11,15 @@ span.stars span {
 }
 
 /**** pr-search ****/
+.pr-search .panel-search input{
+	width: 50%;
+	margin: 0 8px 0 0;
+}
+
+.pr-search table {
+	margin: 16px 0 0 0;
+	}
+
 .pr-search tbody {
 	cursor: pointer;
 }

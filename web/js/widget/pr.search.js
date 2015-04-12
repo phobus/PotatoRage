@@ -10,11 +10,15 @@
 		_create : function() {
 			this.element.addClass('ui-widget pr-search');
 
-			this.searchBox = $('<div/>').appendTo(this.element);
-			this.input = $('<input type="text"/>').appendTo(this.searchBox);
+			this.panel_search = $('<div/>', {
+				class : 'panel-search'
+			}).appendTo(this.element);
+			this.input = $('<input/>', {
+				type : 'text'
+			}).appendTo(this.panel_search);
 			this.button = $("<button>", {
 				text : "Buscar"
-			}).appendTo(this.searchBox);
+			}).appendTo(this.panel_search);
 
 			this.table = $('<table/>').appendTo(this.element);
 			this.colgroup = $('<colgroup/>').appendTo(this.table);
@@ -28,7 +32,7 @@
 
 			this.element.hide();
 			this.table.hide();
-			
+
 			this._on(this.button, {
 				click : function(event) {
 					this.search(this.input.val());

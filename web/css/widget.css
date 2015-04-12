@@ -1,23 +1,47 @@
 /**** rating ****/
 span.stars, span.stars span {
-    display: block;
-    background: url(../img/stars.png) 0 -16px repeat-x;
-    width: 160px;
-    height: 16px;
+	display: block;
+	background: url(../img/stars.png) 0 -16px repeat-x;
+	width: 160px;
+	height: 16px;
 }
 
 span.stars span {
-    background-position: 0 0;
+	background-position: 0 0;
 }
+
 /**** pr-search ****/
-.pr-search tbody{
+.pr-search tbody {
 	cursor: pointer;
 }
 
-.pr-search table .title{
+.pr-search table .title {
 	width: 80%;
 }
 
-.pr-search td:nth-child(2){
+.pr-search td:nth-child(2) {
 	text-align: center;
+}
+
+/**** pr-show-media ****/
+.pr-show-media, .pr-show-media .panel-rating {
+	overflow: hidden;
+}
+
+.pr-show-media img {
+	float: left;
+	display: block;
+	margin: 0 16px 0 0;
+}
+
+.pr-show-media .stars {
+	float: left;
+}
+
+.pr-show-media h3 {
+	display: inline;
+}
+
+.pr-show-media .panel-data a {
+	display: block;
 }

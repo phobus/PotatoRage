@@ -3,7 +3,7 @@ html, body {
 	padding: 0px;
 }
 
-h1, h2 {
+h1, h2, h3 {
 	margin: 0px;
 }
 
@@ -76,9 +76,9 @@ h1, h2 {
 }
 
 #footer {
-	background: #ccc;
+	/*background: #ccc;
 	text-align: right;
-	height: 1%;
+	height: 1%;*/
 }
 
 table {

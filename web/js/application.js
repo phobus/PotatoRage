@@ -11,9 +11,9 @@ $(document).ready(function() {
 		if (this.id == 'home') {
 
 		} else if (this.id == 'movie') {
-			$('#search').search('option', 'type', this.id).show();
-		} else if (this.id == 'serie') {
-			$('#search').search('option', 'type', this.id).show();
+			$('#search').search('option', 'media', this.id).show();
+		} else if (this.id == 'tv') {
+			$('#search').search('option', 'media', this.id).show();
 		} else if (this.id == 'config') {
 
 		}
@@ -23,10 +23,20 @@ $(document).ready(function() {
 
 	$('#search').search({
 		selectedMedia : function(event, data) {
-			$('#show-movie').showMedia('loadData', data.type, data.id);
+			$('#show-movie').showMedia('loadData', data.media, data.id);
 			$('#search').hide();
 		}
 	});
-
+	loadConfig();
 	$('#home').click();
+
+	function loadConfig() {
+		$.ajax({
+			type : 'GET',
+			url : 'api/config',
+			success : function(data, status, jqXHR) {
+				$('#show-movie').showMedia('option', 'url_img', data.url_img);
+			}
+		});
+	}
 });

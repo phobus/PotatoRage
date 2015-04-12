@@ -16,7 +16,8 @@ def run():
     app.run(host=setup.HOST, port=setup.PORT)
 
 # indexer_series = TheTvDb()
-    
+indexer = TheMovieDb()
+
 @app.get('/')
 def _index():
     return static_file(setup.INDEX, root=setup.STATIC_DIR)
@@ -25,7 +26,11 @@ def _index():
 def _send_static(filename):
     return static_file(filename, root=setup.STATIC_DIR)
 
-# rest api
+# config
+@app.get('/api/config')
+def _get_config():
+    config = {'url_img': indexer.url_img}
+    return config
 # indexer
 
 @app.get('/api/idx/movie')
@@ -33,26 +38,26 @@ def _idx_search_movies():
     # try:
     query = request.query.q
     # except Exception, error:
-    return TheMovieDb().search_movies(query)
+    return indexer.search_movies(query)
 
 @app.get('/api/idx/movie/<id>')
 def _idx_get_movie(id):
     # try:
     # except Exception, error:
-    return TheMovieDb().get_movie(id)
+    return indexer.get_movie(id)
 
-@app.get('/api/idx/serie')
+@app.get('/api/idx/tv')
 def _idx_search_serie():
     # try:
     query = request.query.q
     # except Exception, error:
-    return TheMovieDb().search_series(query)
+    return indexer.search_series(query)
 
-@app.get('/api/idx/serie/<id>')
+@app.get('/api/idx/tv/<id>')
 def _idx_get_serie(id):
     # try:
     # except Exception, error:
-    return TheMovieDb().get_serie(id)
+    return indexer.get_serie(id)
 
 """class MyWSGIRefServer(ServerAdapter):
     # server = None

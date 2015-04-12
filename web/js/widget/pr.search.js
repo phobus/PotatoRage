@@ -2,7 +2,7 @@
 	'use strict';
 	$.widget("pr.search", {
 		options : {
-			type : null,
+			media : null,
 			selectedMedia : function() {
 			}
 		},
@@ -45,7 +45,7 @@
 				'click tr' : function(event) {
 					var currentTarget = $(event.currentTarget);
 					this._trigger("selectedMedia", event, {
-						type : this.options.type,
+						media : this.options.media,
 						id : currentTarget.data('id')
 					});
 				}
@@ -62,12 +62,12 @@
 		},
 
 		clear : function() {
-			if (this.options.type != null) {
+			if (this.options.media != null) {
 				this.input.val('');
 				this.tbody.empty();
 				this.table.hide();
 				this.element.hide();
-				this.options.type = null;
+				this.options.media = null;
 			}
 		},
 
@@ -112,7 +112,7 @@
 			var widget = this;
 			$.ajax({
 				type : 'GET',
-				url : 'api/idx/' + this.options.type,
+				url : 'api/idx/' + this.options.media,
 				data : {
 					q : query
 				},

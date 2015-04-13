@@ -11,14 +11,14 @@ span.stars span {
 }
 
 /**** pr-search ****/
-.pr-search .panel-search input{
+.pr-search .panel-search input {
 	width: 50%;
 	margin: 0 8px 0 0;
 }
 
 .pr-search table {
 	margin: 16px 0 0 0;
-	}
+}
 
 .pr-search tbody {
 	cursor: pointer;
@@ -37,31 +37,13 @@ span.stars span {
 	position: relative;
 }
 
-.pr-show-media, .pr-show-media .panel-rating {
-	overflow: hidden;
-}
-
-.pr-show-media .panel-title {
-	margin: 0 0 2px 0;
-}
-
-.pr-show-media .panel-rating {
-	margin: 0 0 16px 0;
-}
-
-.pr-show-media img {
+.pr-show-media .panel-img {
 	float: left;
-	display: block;
-	margin: 0 16px 0 0;
 }
 
-.pr-show-media h3 {
-	display: inline;
-	margin: 0 8px 8px 0;
-}
-
-.pr-show-media .panel-data a {
-	display: block;
+.pr-show-media .panel-text {
+	margin-left: 154px;
+	padding-left: 16px;
 }
 
 .pr-show-media .panel-links {
@@ -70,12 +52,28 @@ span.stars span {
 	right: 0px;
 }
 
+.pr-show-media .pr-icon {
+	float: right;F
+}
+
+.pr-show-media .panel-text h3 {
+	margin: 0 8px 0 0;
+	display: inline;
+}
+
+.pr-show-media .stars {
+	margin: 4px 0 16px 0;
+}
+
+.pr-show-media strong {
+	margin: 0 4px 0 0;
+}
 /**** pr-show-media ****/
 .pr-icon {
 	height: 16px;
 	width: 16px;
-	float: right;
-	margin: 0 0 0 4px;
+	margin: 4px;
+	display: block;
 }
 
 .icon-imdb {

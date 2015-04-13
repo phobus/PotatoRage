@@ -13,38 +13,40 @@
 			this.element.addClass('ui-widget pr-show-media');
 			this.element.hide();
 
+			// image column
+			this.panel_img = $('<div/>', {
+				class : 'panel-img'
+			}).appendTo(this.element);
 			this.poster = $('<img/>', {
 				src : ''
-			}).appendTo(this.element);
+			}).appendTo(this.panel_img);
 
-			// title
-			this.panel_title = $('<div/>', {
-				class : 'panel-title'
+			// text column
+			this.panel_text = $('<div/>', {
+				class : 'panel-text'
 			}).appendTo(this.element);
-			this.title = $('<h3/>').appendTo(this.panel_title);
-			this.release_date = $('<span/>').appendTo(this.panel_title);
+			// title - release_date
+			this.title = $('<h3/>').appendTo(this.panel_text);
+			this.release_date = $('<span/>').appendTo(this.panel_text);
 
 			// rating
-			this.panel_rating = $('<div/>', {
-				class : 'panel-rating'
-			}).appendTo(this.element);
 			this.vote_average = $('<span/>', {
 				class : 'stars'
-			}).appendTo(this.panel_rating);
+			}).appendTo(this.panel_text);
 
-			// data
-			this.panel_data = $('<div/>', {
-				class : 'panel-data'
-			}).appendTo(this.element);
-			$('<span/>', {
-				text : 'Sinopsis'
-			}).appendTo(this.panel_data);
-			this.overview = $('<p/>').appendTo(this.panel_data);
+			// overview
+			$('<strong/>', {
+				text : 'Sinopsis:'
+			}).appendTo(this.panel_text);
+			this.overview = $('<p/>').appendTo(this.panel_text);
 
-			$('<span/>', {
+			// status
+			var item_status = $('<p/>').appendTo(this.panel_text);
+			$('<strong/>', {
 				text : 'Estado:'
-			}).appendTo(this.panel_data);
-			this.status = $('<span/>').appendTo(this.panel_data);
+			}).appendTo(item_status);
+			this.status = $('<span/>').appendTo(item_status);
+			
 
 			// icons
 			this.panel_links = $('<div/>', {

@@ -5,17 +5,18 @@ import urllib
 import urllib2
 import json
 
-class TheMovieDb:
+from potatorage.indexer.indexer import Indexer
+
+class TheMovieDb(Indexer):
     def __init__(self):
+        Indexer.__init__(self, 0, 'TheMovieDb', 'https://www.themoviedb.org/', True, True)
         self.config = {}
         self.config['base_url'] = 'http://api.themoviedb.org/3'
         self.config['api_key'] = '28eeb03a21186cf0512bfd1d11ce829e'
         self.config['language'] = 'es'
         self.url_config = u'%(base_url)s/configuration?api_key=%(api_key)s' % self.config
-        self.url_search_movies = u'%(base_url)s/search/movie?api_key=%(api_key)s&language=%(language)s&query=%%s' % self.config
-        self.url_search_seres = u'%(base_url)s/search/tv?api_key=%(api_key)s&language=%(language)s&query=%%s' % self.config
-        self.url_get_movie = u'%(base_url)s/movie/%%s?api_key=%(api_key)s&language=%(language)s' % self.config
-        self.url_get_serie = u'%(base_url)s/tv/%%s?api_key=%(api_key)s&language=%(language)s' % self.config
+        self.url_search = u'%(base_url)s/search/%%s?api_key=%(api_key)s&language=%(language)s&query=%%s' % self.config
+        self.url_get = u'%(base_url)s/%%s/%%s?api_key=%(api_key)s&language=%(language)s' % self.config
         self.url_img = ''
         self.load_config()
         
@@ -27,15 +28,21 @@ class TheMovieDb:
     
     def search_movies(self, query):
         query = urllib.quote(query.encode("utf-8"))
-        url = self.url_search_movies % query
+        url = self.url_search % ('movie', query)
 
         response = urllib2.urlopen(url)
-        json = response.read()
-        return json
+        data = response.read()
+        dict = json.loads(data)
+        results = []
+        for r in dict['results']:
+            results.append({'title': r['title'],
+                            'date': r['release_date'],
+                            'vote_average': r['vote_average']})
+        return self.build_results(results)
     
-    def get_movie(self, id):
-        id = urllib.quote(id.encode("utf-8"))
-        url = self.url_get_movie % id
+    def get_movie(self, movie_id):
+        movie_id = urllib.quote(movie_id.encode("utf-8"))
+        url = self.url_get % ('movie', movie_id)
 
         response = urllib2.urlopen(url)
         json = response.read()
@@ -43,15 +50,21 @@ class TheMovieDb:
 
     def search_series(self, query):
         query = urllib.quote(query.encode("utf-8"))
-        url = self.url_search_seres % query
+        url = self.url_search % ('tv', query)
 
         response = urllib2.urlopen(url)
-        json = response.read()
-        return json
+        data = response.read()
+        dict = json.loads(data)
+        results = []
+        for r in dict['results']:
+            results.append({'title': r['name'],
+                            'date': r['first_air_date'],
+                            'vote_average': r['vote_average']})
+        return self.build_results(results)
     
-    def get_serie(self, id):
-        id = urllib.quote(id.encode("utf-8"))
-        url = self.url_get_serie % id
+    def get_serie(self, tv_id):
+        tv_id = urllib.quote(tv_id.encode("utf-8"))
+        url = self.url_get % ('tv', tv_id)
 
         response = urllib2.urlopen(url)
         json = response.read()

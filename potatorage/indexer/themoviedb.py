@@ -35,7 +35,8 @@ class TheMovieDb(Indexer):
         dict = json.loads(data)
         results = []
         for r in dict['results']:
-            results.append({'title': r['title'],
+            results.append({'id': r['id'],
+                            'title': r['title'],
                             'date': r['release_date'],
                             'vote_average': r['vote_average']})
         return self.build_results(results)
@@ -57,7 +58,8 @@ class TheMovieDb(Indexer):
         dict = json.loads(data)
         results = []
         for r in dict['results']:
-            results.append({'title': r['name'],
+            results.append({'id': r['id'],
+                            'title': r['name'],
                             'date': r['first_air_date'],
                             'vote_average': r['vote_average']})
         return self.build_results(results)

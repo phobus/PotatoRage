@@ -33,7 +33,6 @@
 
 			this.thead.append(this._createHeaderRow());
 
-			this.element.hide();
 			this.table.hide();
 
 			this._on(this.button, {

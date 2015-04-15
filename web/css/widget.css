@@ -83,3 +83,8 @@ span.stars span {
 .icon-tmdb {
 	background-image: url("../img/themoviedb.png");
 }
+
+/**** searchActions ****/
+.pr-search-actions{
+	clear: both;
+}

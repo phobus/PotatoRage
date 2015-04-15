@@ -10,7 +10,6 @@
 
 		_create : function() {
 			this.element.addClass('ui-widget pr-show-media');
-			this.element.hide();
 
 			// image column
 			this.panel_img = $('<div/>', {
@@ -118,7 +117,6 @@
 					widget.poster.attr('src', data.url_poster);
 
 					widget.vote_average.stars();
-					widget.element.show();
 				}
 			});
 		},
@@ -144,8 +142,6 @@
 				
 				this.options.media = null;
 				this.options.id = null;
-
-				this.element.hide();
 			}
 		}
 	});

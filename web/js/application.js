@@ -1,13 +1,15 @@
 $(document).ready(function() {
 	'use strict';
-	$('#search').search();
-	$('#show-movie').showMedia();
+	$('#search').search().hide();
+	$('#show-media').showMedia().hide();
+	$('#search-actions').searchActions().hide();
 
 	$('#navigation a').click(function() {
 		$('#section').text(this.text);
-		$('#search').search('clear');
-		$('#show-movie').showMedia('clear');
-
+		$('#search').search('clear').hide();
+		$('#show-media').showMedia('clear').hide();
+		$('#search-actions').hide();
+		
 		if (this.id == 'home') {
 
 		} else if (this.id == 'movie') {
@@ -23,20 +25,21 @@ $(document).ready(function() {
 
 	$('#search').search({
 		selectedMedia : function(event, data) {
-			$('#show-movie').showMedia('loadData', data.media, data.id);
+			$('#show-media').showMedia('loadData', data.media, data.id).show();;
+			$('#search-actions').searchActions({
+				media : data.media,
+				id : data.id
+			}).show();
 			$('#search').hide();
 		}
 	});
-	loadConfig();
+	
+	$('#search-actions').searchActions({
+		back : function(event) {
+			console.log('ok');
+			$('#show-media').showMedia('clear').hide();
+			$('#search').show();
+		}
+	});
 	$('#home').click();
-
-	function loadConfig() {
-		$.ajax({
-			type : 'GET',
-			url : 'api/config',
-			success : function(data, status, jqXHR) {
-				$('#show-movie').showMedia('option', 'url_img', data.url_img);
-			}
-		});
-	}
 });

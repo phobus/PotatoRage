@@ -4,7 +4,6 @@
 		options : {
 			media : null,
 			id : null,
-			url_img : null,
 			url_imdb : 'http://www.imdb.com/title/',
 			url_tmdb : 'https://www.themoviedb.org/'
 		},
@@ -46,7 +45,20 @@
 				text : 'Estado:'
 			}).appendTo(item_status);
 			this.status = $('<span/>').appendTo(item_status);
-			
+
+			// number_of_episodes
+			this.item_n_episodes = $('<p/>').appendTo(this.panel_text);
+			$('<strong/>', {
+				text : 'Episodios:'
+			}).appendTo(this.item_n_episodes);
+			this.n_episodes = $('<span/>').appendTo(this.item_n_episodes);
+
+			// number_of_seasons
+			this.item_n_seasons = $('<p/>').appendTo(this.panel_text);
+			$('<strong/>', {
+				text : 'Temporadas:'
+			}).appendTo(this.item_n_seasons);
+			this.n_seasons = $('<span/>').appendTo(this.item_n_seasons);
 
 			// icons
 			this.panel_links = $('<div/>', {
@@ -85,15 +97,17 @@
 				type : 'GET',
 				url : 'api/idx/' + media + '/' + id,
 				success : function(data, status, jqXHR) {
+					widget.title.text(data.title);
+					widget.release_date.text(data.date);
 					if (widget.options.media == 'movie') {
-						widget.title.text(data.title);
-						widget.link_imdb.attr('href', widget.options.url_imdb
-								+ data.imdb_id);
-						widget.release_date.text(data.release_date);
+						widget.link_imdb.attr('href',
+								widget.options.url_imdb + data.imdb_id);
+						widget.item_n_episodes.hide();
+						widget.item_n_seasons.hide();
 					} else if (widget.options.media == 'tv') {
-						widget.title.text(data.name);
 						widget.link_imdb.hide();
-						widget.release_date.text(data.first_air_date);
+						widget.n_episodes.text(data.n_episodes);
+						widget.n_seasons.text(data.n_seasons);
 					}
 					widget.link_tmdb.attr('href', widget.options.url_tmdb
 							+ widget.options.media + '/' + data.id);
@@ -101,8 +115,7 @@
 					widget.overview.text(data.overview);
 					widget.vote_average.text(data.vote_average);
 
-					widget.poster.attr('src', widget.options.url_img
-							+ data.poster_path);
+					widget.poster.attr('src', data.url_poster);
 
 					widget.vote_average.stars();
 					widget.element.show();
@@ -122,6 +135,13 @@
 				this.link_tmdb.attr('href', '');
 				this.vote_average.text('');
 
+				this.n_episodes.text('');
+				this.n_seasons.text('');
+
+				this.item_n_episodes.show();
+				this.item_n_seasons.show();
+				this.link_imdb.show();
+				
 				this.options.media = null;
 				this.options.id = null;
 

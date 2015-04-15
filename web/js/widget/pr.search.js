@@ -23,10 +23,13 @@
 			this.table = $('<table/>').appendTo(this.element);
 			this.colgroup = $('<colgroup/>').appendTo(this.table);
 			this.thead = $('<thead/>').appendTo(this.table);
-			this.tbody = $('<tbody class="ui-widget-content"/>').appendTo(
-					this.table);
+			this.tbody = $('<tbody/>', {
+				class : 'ui-widget-content'
+			}).appendTo(this.table);
 
-			$('<col class="title"/>').appendTo(this.colgroup);
+			$('<col/>', {
+				class : 'title'
+			}).appendTo(this.colgroup);
 
 			this.thead.append(this._createHeaderRow());
 
@@ -85,22 +88,13 @@
 		},
 
 		_createRow : function(data) {
-			var title = '';
-			if (data.title) {
-				title = data.title;
-			} else if (data.name) {
-				title = data.name;
-			}
-
 			var date = '';
-			if (data.release_date) {
-				date = data.release_date.substr(0, 4);
-			} else if (data.first_air_date) {
-				date = data.first_air_date.substr(0, 4);
+			if (data.date) {
+				date = data.date.substr(0, 4);
 			}
-
+			
 			var html = '<tr>';
-			html += '<td>' + title + '</td>';
+			html += '<td>' + data.title + '</td>';
 			html += '<td>' + date + '</td>';
 			html += '<td><span class="stars">' + data.vote_average
 					+ '</span></td>';

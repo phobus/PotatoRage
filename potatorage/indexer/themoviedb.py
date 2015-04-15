@@ -39,15 +39,24 @@ class TheMovieDb(Indexer):
                             'title': r['title'],
                             'date': r['release_date'],
                             'vote_average': r['vote_average']})
-        return self.build_results(results)
+        return {'results': results}
     
     def get_movie(self, movie_id):
         movie_id = urllib.quote(movie_id.encode("utf-8"))
         url = self.url_get % ('movie', movie_id)
 
         response = urllib2.urlopen(url)
-        json = response.read()
-        return json
+        data = response.read()
+        dict = json.loads(data)
+        results = {'id': dict['id'],
+                   'imdb_id': dict['imdb_id'],
+                   'title': dict['title'],
+                   'date': dict['release_date'],
+                   'vote_average': dict['vote_average'],
+                   'status': dict['status'],
+                   'overview': dict['overview'],
+                   'url_poster': self.url_img + dict['poster_path']}
+        return results
 
     def search_series(self, query):
         query = urllib.quote(query.encode("utf-8"))
@@ -62,12 +71,24 @@ class TheMovieDb(Indexer):
                             'title': r['name'],
                             'date': r['first_air_date'],
                             'vote_average': r['vote_average']})
-        return self.build_results(results)
+        return {'results': results}
     
     def get_serie(self, tv_id):
         tv_id = urllib.quote(tv_id.encode("utf-8"))
         url = self.url_get % ('tv', tv_id)
 
         response = urllib2.urlopen(url)
-        json = response.read()
-        return json
+        data = response.read()
+        dict = json.loads(data)
+        results = {'id': dict['id'],
+                   'title': dict['name'],
+                   # 'imdb_id': dict['imdb_id'],
+                   'date': dict['first_air_date'],
+                   'vote_average': dict['vote_average'],
+                   'status': dict['status'],
+                   'overview': dict['overview'],
+                   'url_poster': self.url_img + dict['poster_path'],
+                   #
+                   'n_episodes': dict['number_of_episodes'],
+                   'n_seasons': dict['number_of_seasons']}
+        return results

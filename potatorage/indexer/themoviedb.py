@@ -50,7 +50,7 @@ class TheMovieDb(Indexer):
         """
         id = urllib.quote(id.encode("utf-8"))
         if media in ('tv', 'movie'):
-            url = self.url_get % (media, movie_id)
+            url = self.url_get % (media, id)
             response = urllib2.urlopen(url)
             data = response.read()
             dict = json.loads(data)
@@ -83,7 +83,8 @@ class TheMovieDb(Indexer):
         """
         API search movies
         """
-        results = self._search('movie', query)
+        dict = self._search('movie', query)
+        results = []
         for r in dict['results']:
             results.append({'id': r['id'],
                             'title': r['title'],
@@ -95,7 +96,8 @@ class TheMovieDb(Indexer):
         """
         API search TV shows
         """
-        results = self._search('tv', query)
+        dict = self._search('tv', query)
+        results = []
         for r in dict['results']:
             results.append({'id': r['id'],
                             'title': r['name'],
@@ -109,7 +111,7 @@ class TheMovieDb(Indexer):
         """
         results = self._get_media('movie', movie_id)
         results = self._parse_movie(results)
-        results['poster'] = self.url_img + dict['poster'] if dict['poster'] else None
+        results['poster'] = self.url_img + results['poster'] if results['poster'] else None
         return results
     
     def get_tv(self, tv_id):
@@ -118,7 +120,7 @@ class TheMovieDb(Indexer):
         """
         results = self._get_media('tv', tv_id)
         results = self._parse_tv(results)
-        results['poster'] = self.url_img + dict['poster'] if dict['poster'] else None
+        results['poster'] = self.url_img + results['poster'] if results['poster'] else None
         return results
 
     def save_tv(self, media, id):

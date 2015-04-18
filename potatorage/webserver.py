@@ -53,13 +53,13 @@ def _idx_search_tv():
     # try:
     query = request.query.query
     # except Exception, error:
-    return indexer.search_series(query)
+    return indexer.search_tv(query)
 
 @app.get('/api/idx/tv/<id>')
 def _idx_get_tv(id):
     # try:
     # except Exception, error:
-    return indexer.get_serie(id)
+    return indexer.get_tv(id)
 
 """class MyWSGIRefServer(ServerAdapter):
     # server = None

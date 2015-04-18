@@ -48,6 +48,7 @@ class TheMovieDb(Indexer):
         response = urllib2.urlopen(url)
         data = response.read()
         dict = json.loads(data)
+        print url
         results = {'id': dict['id'],
                    'imdb_id': dict['imdb_id'],
                    'title': dict['title'],
@@ -55,7 +56,8 @@ class TheMovieDb(Indexer):
                    'vote_average': dict['vote_average'],
                    'status': dict['status'],
                    'overview': dict['overview'],
-                   'url_poster': self.url_img + dict['poster_path']}
+                   'url_poster': self.url_img + dict['poster_path'] if dict['poster_path'] else None
+                   }
         return results
 
     def search_series(self, query):

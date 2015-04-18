@@ -38,6 +38,20 @@
 			this.element.empty();
 
 			this._super();
+		},
+		
+		saveMedia: function(id) {
+			var widget = this;
+			$.ajax({
+				type : 'POST',
+				url : 'api/idx/' + this.options.media,
+				data : {
+					id : id
+				},
+				success : function(data, status, jqXHR) {
+					
+				}
+			});
 		}
 	});
 })(jQuery);

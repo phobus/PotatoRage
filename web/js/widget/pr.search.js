@@ -111,7 +111,7 @@
 				type : 'GET',
 				url : 'api/idx/' + this.options.media,
 				data : {
-					q : query
+					query : query
 				},
 				success : function(data, status, jqXHR) {
 					widget.tbody.empty();

@@ -3,9 +3,7 @@
 	$.widget("pr.showMedia", {
 		options : {
 			media : null,
-			id : null,
-			url_imdb : 'http://www.imdb.com/title/',
-			url_tmdb : 'https://www.themoviedb.org/'
+			id : null
 		},
 
 		_create : function() {
@@ -99,8 +97,8 @@
 					widget.title.text(data.title);
 					widget.release_date.text(data.date);
 					if (widget.options.media == 'movie') {
-						widget.link_imdb.attr('href',
-								widget.options.url_imdb + data.imdb_id);
+						widget.link_imdb.attr('href', $.linker
+								.IMDb(data.imdb_id));
 						widget.item_n_episodes.hide();
 						widget.item_n_seasons.hide();
 					} else if (widget.options.media == 'tv') {
@@ -108,8 +106,8 @@
 						widget.n_episodes.text(data.n_episodes);
 						widget.n_seasons.text(data.n_seasons);
 					}
-					widget.link_tmdb.attr('href', widget.options.url_tmdb
-							+ widget.options.media + '/' + data.id);
+					widget.link_tmdb.attr('href', $.linker.TheMovieDb(
+							widget.options.media, data.id));
 					widget.status.text(data.status);
 					widget.overview.text(data.overview);
 					widget.vote_average.text(data.vote_average);
@@ -139,7 +137,7 @@
 				this.item_n_episodes.show();
 				this.item_n_seasons.show();
 				this.link_imdb.show();
-				
+
 				this.options.media = null;
 				this.options.id = null;
 			}

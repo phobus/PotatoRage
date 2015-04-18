@@ -29,14 +29,13 @@ def _send_static(filename):
 # config
 @app.get('/api/config')
 def _get_config():
-    config = {'url_img': indexer.url_img}
-    return config
+    return indexer.info()
 # indexer
 
 @app.get('/api/idx/movie')
 def _idx_search_movies():
     # try:
-    query = request.query.q
+    query = request.query.query
     # except Exception, error:
     return indexer.search_movies(query)
 
@@ -49,7 +48,7 @@ def _idx_get_movie(id):
 @app.get('/api/idx/tv')
 def _idx_search_serie():
     # try:
-    query = request.query.q
+    query = request.query.query
     # except Exception, error:
     return indexer.search_series(query)
 

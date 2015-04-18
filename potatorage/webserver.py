@@ -3,11 +3,12 @@
 """
 
 """
+from lib.bottle import Bottle, static_file, request
+
 from potatorage import setup
 from potatorage.setup import app
 from potatorage.indexer.themoviedb import TheMovieDb
-
-from lib.bottle import Bottle, static_file, request
+from potatorage import database
 
 if not app:
     app = Bottle()
@@ -17,6 +18,8 @@ def run():
 
 # indexer_series = TheTvDb()
 indexer = TheMovieDb()
+s = database.Schema()
+s.insert('indexer', indexer.info());
 
 @app.get('/')
 def _index():
@@ -46,14 +49,14 @@ def _idx_get_movie(id):
     return indexer.get_movie(id)
 
 @app.get('/api/idx/tv')
-def _idx_search_serie():
+def _idx_search_tv():
     # try:
     query = request.query.query
     # except Exception, error:
     return indexer.search_series(query)
 
 @app.get('/api/idx/tv/<id>')
-def _idx_get_serie(id):
+def _idx_get_tv(id):
     # try:
     # except Exception, error:
     return indexer.get_serie(id)

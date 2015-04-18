@@ -95,7 +95,7 @@
 			var html = '<tr>';
 			html += '<td>' + data.title + '</td>';
 			html += '<td>' + date + '</td>';
-			html += '<td><span class="stars">' + data.vote_average
+			html += '<td><span class="stars">' + data.rating
 					+ '</span></td>';
 			html += '</tr>';
 
@@ -116,10 +116,11 @@
 				success : function(data, status, jqXHR) {
 					widget.tbody.empty();
 					var row;
+					var buffer = [];
 					for (var i = 0; i < data.results.length; i++) {
-						row = widget._createRow(data.results[i]);
-						widget.tbody.append(row);
+						buffer.push(widget._createRow(data.results[i]));
 					}
+					widget.tbody.append(buffer);
 					widget.tbody.find('span.stars').stars();
 					widget.table.show();
 				}

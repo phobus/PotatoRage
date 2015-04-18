@@ -19,20 +19,14 @@ class Schema(object):
         conn.commit()
         c.close()
         conn.close()
-        
-    def createDataBase2(self):
-        queries = [
-            'CREATE TABLE db_version (db_version INT);',
-            "INSERT INTO db_version VALUES (%s);" % self.version,
-            'CREATE TABLE indexer (indexer_id INT PRIMARY KEY, name TEXT, url TEXT, series INT, movies INT);',
-            "INSERT INTO indexer VALUES (0, 'TheTVDB','http://thetvdb.com/', 1, 0);",
-            'CREATE TABLE media (media_id INT PRIMARY KEY AUTOINCREMENT, type TEXT, indexer_id INT, imdb_id TEXT, title TEXT, date DATE, overview TEXT, status TEXT, rating REAL, status TEXT, poster TEXT);',
-            ]
-        con = sqlite3.connect(DATA_BASE)
-        # con = sqlite3.connect(':memory:')
-        for query in queries:
-            con.execute(query)
-        con.commit()
-        con.close()
 
-        'INSERT INTO media VALUES (?,?,?,?,?,?,?,?,?,?)'
+    def insert(self, table, values):
+        cols = values.keys()
+        # generate insert statementx    
+        stmt = 'INSERT INTO %s (%s) VALUES (%s)' %(table,
+                                                   ', '.join(cols),
+                                                   ', '.join([":%s" % col for col in cols]))
+        print stmt
+        return stmt
+#https://excelicious.wordpress.com/2010/04/23/python-data-access-patterns-part-1/
+

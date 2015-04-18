@@ -26,7 +26,7 @@
 			this.release_date = $('<span/>').appendTo(this.panel_text);
 
 			// rating
-			this.vote_average = $('<span/>', {
+			this.rating = $('<span/>', {
 				class : 'stars'
 			}).appendTo(this.panel_text);
 
@@ -91,13 +91,13 @@
 					}
 					widget.status.text(data.status);
 					widget.overview.text(data.overview);
-					widget.vote_average.text(data.vote_average);
+					widget.rating.text(data.rating);
 
-					widget.poster.attr('src', data.url_poster);
+					widget.poster.attr('src', data.poster);
 					widget.panel_links.append(widget._createLinks(
 							widget.options.media, data.id, data.imdb_id));
 
-					widget.vote_average.stars();
+					widget.rating.stars();
 				}
 			});
 		},
@@ -124,7 +124,7 @@
 				this.release_date.text('');
 				this.overview.text('');
 				this.poster.attr('src', '');
-				this.vote_average.text('');
+				this.rating.text('');
 
 				this.n_episodes.text('');
 				this.n_seasons.text('');

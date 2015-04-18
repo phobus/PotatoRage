@@ -4,6 +4,7 @@ STATIC_DIR = 'web'
 MEDIA_DIR = None
 
 DATA_BASE = None
+SQL_FOLDER = None
 INDEX = 'index.html'
 
 app = None

@@ -38,6 +38,9 @@ class PRDaemon(Daemon):
             config = os.path.join(setup.DATA_DIR, 'config.ini')
         self.checkFile(config)
         
+        pr_folder =  os.path.join(setup.HOME_DIR, 'potatorage')
+        setup.SQL_FOLDER = os.path.join(pr_folder, 'sql')
+        
         setup.DATA_BASE = os.path.join(setup.DATA_DIR, 'potatorage.db')
         if not os.path.isfile(setup.DATA_BASE):
             from potatorage.database import Schema
@@ -45,6 +48,7 @@ class PRDaemon(Daemon):
             
         setup.MEDIA_DIR = os.path.join(setup.DATA_DIR, 'media')
         
+
         # log 
         logfile = os.path.join(setup.DATA_DIR, 'potatorage.log')
         self.checkFile(logfile)        

@@ -53,7 +53,8 @@ span.stars span {
 }
 
 .pr-show-media .pr-icon {
-	float: right;F
+	float: right;
+	F
 }
 
 .pr-show-media .panel-text h3 {
@@ -70,21 +71,15 @@ span.stars span {
 }
 /**** pr-show-media ****/
 .pr-icon {
-	height: 16px;
-	width: 16px;
 	margin: 4px;
 	display: block;
 }
 
-.icon-imdb {
-	background-image: url("../img/imdb_small.png");
+.pr-icon img {
+	height: 16px;
+	width: 16px;
 }
-
-.icon-tmdb {
-	background-image: url("../img/themoviedb.png");
-}
-
 /**** searchActions ****/
-.pr-search-actions{
+.pr-search-actions {
 	clear: both;
 }

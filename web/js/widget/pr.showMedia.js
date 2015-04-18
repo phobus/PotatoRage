@@ -62,20 +62,6 @@
 				class : 'panel-links'
 			}).appendTo(this.element);
 
-			this.link_imdb = $('<a />', {
-				href : '',
-				target : '_blank',
-				class : 'pr-icon icon-imdb',
-				title : 'IMDb'
-			}).appendTo(this.panel_links);
-
-			this.link_tmdb = $('<a />', {
-				href : '',
-				target : '_blank',
-				class : 'pr-icon icon-tmdb',
-				title : 'themoviedb'
-			}).appendTo(this.panel_links);
-
 			this._super();
 		},
 
@@ -97,26 +83,37 @@
 					widget.title.text(data.title);
 					widget.release_date.text(data.date);
 					if (widget.options.media == 'movie') {
-						widget.link_imdb.attr('href', $.linker
-								.IMDb(data.imdb_id));
 						widget.item_n_episodes.hide();
 						widget.item_n_seasons.hide();
 					} else if (widget.options.media == 'tv') {
-						widget.link_imdb.hide();
 						widget.n_episodes.text(data.n_episodes);
 						widget.n_seasons.text(data.n_seasons);
 					}
-					widget.link_tmdb.attr('href', $.linker.TheMovieDb(
-							widget.options.media, data.id));
 					widget.status.text(data.status);
 					widget.overview.text(data.overview);
 					widget.vote_average.text(data.vote_average);
 
 					widget.poster.attr('src', data.url_poster);
+					widget.panel_links.append(widget._createLinks(
+							widget.options.media, data.id, data.imdb_id));
 
 					widget.vote_average.stars();
 				}
 			});
+		},
+
+		_createLinks : function(media, id, imdb_id) {
+			var buffer = [];
+			var link = $.linker.TheMovieDb(media, id);
+			if (link) {
+				buffer.push(link);
+			}
+
+			link = $.linker.IMDb(imdb_id);
+			if (link) {
+				buffer.push(link);
+			}
+			return buffer;
 		},
 
 		clear : function() {
@@ -127,8 +124,6 @@
 				this.release_date.text('');
 				this.overview.text('');
 				this.poster.attr('src', '');
-				this.link_imdb.attr('href', '');
-				this.link_tmdb.attr('href', '');
 				this.vote_average.text('');
 
 				this.n_episodes.text('');
@@ -136,7 +131,8 @@
 
 				this.item_n_episodes.show();
 				this.item_n_seasons.show();
-				this.link_imdb.show();
+
+				this.panel_links.empty();
 
 				this.options.media = null;
 				this.options.id = null;

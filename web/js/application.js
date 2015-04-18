@@ -36,7 +36,6 @@ $(document).ready(function() {
 	
 	$('#search-actions').searchActions({
 		back : function(event) {
-			console.log('ok');
 			$('#show-media').showMedia('clear').hide();
 			$('#search').show();
 		}

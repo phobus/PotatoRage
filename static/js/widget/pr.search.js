@@ -3,6 +3,7 @@
 	$.widget("pr.search", {
 		options : {
 			media : null,
+			indexer: null,
 			selectedMedia : function() {
 			}
 		},
@@ -51,6 +52,7 @@
 				'click tr' : function(event) {
 					var currentTarget = $(event.currentTarget);
 					this._trigger("selectedMedia", event, {
+						indexer: this.options.indexer,
 						media : this.options.media,
 						id : currentTarget.data('id')
 					});
@@ -73,6 +75,7 @@
 				this.tbody.empty();
 				this.table.hide();
 				this.element.hide();
+				this.options.indexer = null;
 				this.options.media = null;
 			}
 		},
@@ -114,6 +117,8 @@
 					query : query
 				},
 				success : function(data, status, jqXHR) {
+					widget.options.indexer = data.indexer;
+					
 					widget.tbody.empty();
 					var row;
 					var buffer = [];

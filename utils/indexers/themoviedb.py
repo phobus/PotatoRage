@@ -40,7 +40,8 @@ class TheMovieDb(Indexer):
         query = urllib.quote(query.encode("utf-8"))
         if media in self.media:
             dict = Indexer._requestJson(self, self.config['url_search'] % (media, query, page))
-            return {'results': self._parse_search(media, dict),
+            return {'indexer': self.name,
+                    'results': self._parse_search(media, dict),
                     'page': dict['page'],
                     'total_pages': dict['total_pages'],
                     'total_results': dict['total_results']
@@ -55,10 +56,10 @@ class TheMovieDb(Indexer):
             dict = Indexer._requestJson(self, self.config['url_get'] % (media, id))
             return self._parse_media(media, dict)
         
-    def _get_season(self, id, season):
+    def get_season(self, id, season):
         id = urllib.quote(id.encode("utf-8"))
         dict = Indexer._requestJson(self, self.config['url_get_season'] % (id, season))
-        return dict
+        return self._parse_season(media, dict)
     
     def _parse_search(self, media, dict):
         results = []
@@ -78,7 +79,8 @@ class TheMovieDb(Indexer):
     
     def _parse_media(self, media, dict):
         if media == 'movie':
-            return {'id': dict['id'],
+            return {'indexer': self.name,
+                    'id': dict['id'],
                     'imdb_id': dict['imdb_id'],
                     'title': dict['title'],
                     'date': dict['release_date'],
@@ -88,7 +90,8 @@ class TheMovieDb(Indexer):
                     'poster': dict['poster_path']}
             
         elif media == 'tv':
-            return {'id': dict['id'],
+            return {'indexer': self.name,
+                    'id': dict['id'],
                     'title': dict['name'],
                     'imdb_id': None,
                     'date': dict['first_air_date'],
@@ -99,3 +102,21 @@ class TheMovieDb(Indexer):
                     #
                     'n_episodes': dict['number_of_episodes'],
                     'n_seasons': dict['number_of_seasons']}
+    
+    def _parse_season(self, media, dict):
+        results = []
+        for ep in dict['episodes']:
+                results.append({'indexer': self.name,
+                                'id': r['id'],
+                                'title': r['name'],
+                                'episode_number': r['episode_number'],
+                                'date': r['air_date'],
+                                'overview': dict['overview']})
+        return {'indexer': self.name,
+                'id': dict['id'],
+                'title': dict['name'],
+                'season_number': dict['season_number'],
+                'date': dict['air_date'],
+                'overview': dict['overview'],
+                #'poster': dict['poster_path'],
+                'episodes': results}

@@ -4,6 +4,7 @@
 		options : {
 			media: null,
 			id: null,
+			indexer: null,
 			back : function() {
 			},
 			save : function() {
@@ -47,9 +48,10 @@
 			var widget = this;
 			$.ajax({
 				type : 'POST',
-				url : 'api/idx/' + this.options.media,
+				url : 'v1/idx/' + this.options.media,
 				data : {
-					id : this.options.id
+					id : this.options.id,
+					indexer: this.options.indexer
 				},
 				success : function(data, status, jqXHR) {
 					console.log(data);

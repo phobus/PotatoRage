@@ -4,13 +4,28 @@
 from utils.indexers import idx
 #from utils.indexers.themoviedb import TheMovieDb
 
-def query_media(media, query, page):
+def query_media(indexer, media, query, page):
     if not page:
         page = 1
-    return idx[_current_indexer(media)].search(media, query, page)
+        
+    if not indexer:
+        indexer = _current_indexer(media)
+        
+    return idx[indexer].search(media, query, page)
 
-def get_media(media, id):
-    return idx[_current_indexer(media)].get_media(media, id)
+def get_media(indexer, media, id):
+    if not indexer:
+        indexer = _current_indexer(media)
+        
+    return idx[indexer].get_media(media, id)
+
+def append_media(media, id, indexer):
+    if not indexer:
+        indexer = _current_indexer(media)
+        
+    media = idx[indexer].get_media(media, id)
+    
+    return {}
 
 def _current_indexer(media):
     return 'TheMovieDb'

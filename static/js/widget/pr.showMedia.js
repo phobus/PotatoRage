@@ -3,6 +3,7 @@
 	$.widget("pr.showMedia", {
 		options : {
 			media : null,
+			indexer : null,
 			id : null
 		},
 
@@ -72,14 +73,20 @@
 			this._super();
 		},
 
-		loadData : function(media, id) {
+		loadData : function(indexer, media, id) {
 			var widget = this;
+			this.options.indexer = indexer;
 			this.options.media = media;
 			this.options.id = id;
 			$.ajax({
 				type : 'GET',
+				data : {
+					indexer : indexer
+				},
 				url : 'v1/idx/' + media + '/' + id,
 				success : function(data, status, jqXHR) {
+					widget.options.indexer = data.indexer;
+
 					widget.title.text(data.title);
 					widget.release_date.text(data.date);
 					if (widget.options.media == 'movie') {
@@ -134,6 +141,7 @@
 
 				this.panel_links.empty();
 
+				this.options.indexer = null;
 				this.options.media = null;
 				this.options.id = null;
 			}

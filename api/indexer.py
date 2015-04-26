@@ -17,9 +17,19 @@ prefix = api.prefix + '/idx'  # + TODO: FILL THIS IN
 # Collection URI - List
 @get(prefix + '/<media>')
 def list(media):
-    return IndexerAPIController.query_media(media, request.query.query, request.query.page)
+    return IndexerAPIController.query_media(request.query.indexer,
+                                            media, 
+                                            request.query.query, 
+                                            request.query.page)
     
 # Element URI - Retrieve element
 @get(prefix + '/<media>/<id>')
 def element(media, id):
-    return IndexerAPIController.get_media(media, id)
+    return IndexerAPIController.get_media(request.query.indexer,
+                                          media, 
+                                          id)
+
+# Collection URI - Add item to collection
+@post(prefix+ '/<media>')
+def append(media):
+    return IndexerAPIController.append_media(media, request.forms.id, request.forms.indexer)

@@ -24,7 +24,7 @@ class TheMovieDb(Indexer):
         
         #
         self.url_img = None
-        #self._load_config()
+        # self._load_config()
 
     def _load_config(self):
         """
@@ -40,8 +40,12 @@ class TheMovieDb(Indexer):
         query = urllib.quote(query.encode("utf-8"))
         if media in self.media:
             dict = Indexer._requestJson(self, self.config['url_search'] % (media, query, page))
-            return dict
-    
+            return {'results': self._parse_search(media, dict),
+                    'page': dict['page'],
+                    'total_pages': dict['total_pages'],
+                    'total_results': dict['total_results']
+                    }
+            
     def get_media(self, media, id):
         """
         search from TheMovieDb by id
@@ -49,9 +53,49 @@ class TheMovieDb(Indexer):
         id = urllib.quote(id.encode("utf-8"))
         if media in self.media:
             dict = Indexer._requestJson(self, self.config['url_get'] % (media, id))
-            return dict
+            return self._parse_media(media, dict)
         
     def _get_season(self, id, season):
         id = urllib.quote(id.encode("utf-8"))
         dict = Indexer._requestJson(self, self.config['url_get_season'] % (id, season))
         return dict
+    
+    def _parse_search(self, media, dict):
+        results = []
+        if media == 'movie':
+            for r in dict['results']:
+                results.append({'id': r['id'],
+                                'title': r['title'],
+                                'date': r['release_date'],
+                                'rating': r['vote_average']})
+        elif media == 'tv':
+            for r in dict['results']:
+                results.append({'id': r['id'],
+                        'title': r['name'],
+                        'date': r['first_air_date'],
+                        'rating': r['vote_average']})
+        return results
+    
+    def _parse_media(self, media, dict):
+        if media == 'movie':
+            return {'id': dict['id'],
+                    'imdb_id': dict['imdb_id'],
+                    'title': dict['title'],
+                    'date': dict['release_date'],
+                    'rating': dict['vote_average'],
+                    'status': dict['status'],
+                    'overview': dict['overview'],
+                    'poster': dict['poster_path']}
+            
+        elif media == 'tv':
+            return {'id': dict['id'],
+                    'title': dict['name'],
+                    'imdb_id': None,
+                    'date': dict['first_air_date'],
+                    'rating': dict['vote_average'],
+                    'status': dict['status'],
+                    'overview': dict['overview'],
+                    'poster': dict['poster_path'],
+                    #
+                    'n_episodes': dict['number_of_episodes'],
+                    'n_seasons': dict['number_of_seasons']}

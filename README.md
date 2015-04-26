@@ -1,4 +1,4 @@
-# PotatoRage
+# Pyster
 Buscador y posproceso para archivos torrent
 
 tiene que ser ligero para funcionar en un nas economico.

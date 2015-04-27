@@ -20,7 +20,7 @@ CREATE TABLE movie (
 );
 
 CREATE TABLE tv (
-	tv_id 			INTEGER PRIMARY KEY AUTOINCREMENT,
+	tv_id 				INTEGER PRIMARY KEY AUTOINCREMENT,
 	indexer 			TEXT,
 	id					TEXT,
 	imdb_id 			TEXT,
@@ -34,21 +34,13 @@ CREATE TABLE tv (
 	n_seasons 			INTEGER
 );
 
-CREATE TABLE season (
-	season_id 			INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE episode (
+	episode_id 			INTEGER PRIMARY KEY AUTOINCREMENT,
+	tv_id 				INTEGER,
 	indexer 			TEXT,
 	id					TEXT,
 	title 				TEXT,
 	season_number		INTEGER,
-	date 				DATE,
-	overview 			TEXT
-);
-
-CREATE TABLE episode (
-	episode_id 			INTEGER PRIMARY KEY AUTOINCREMENT,
-	indexer 			TEXT,
-	id					TEXT,
-	title 				TEXT,
 	episode_number		INTEGER,
 	date 				DATE,
 	overview 			TEXT

@@ -32,4 +32,6 @@ def element(media, id):
 # Collection URI - Add item to collection
 @post(prefix+ '/<media>')
 def append(media):
-    return IndexerAPIController.append_media(media, request.forms.id, request.forms.indexer)
+    return IndexerAPIController.append_media(request.forms.indexer,
+                                             media, 
+                                             request.forms.id)

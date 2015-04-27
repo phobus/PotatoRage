@@ -12,9 +12,16 @@ class DAO:
     def __init__(self, table_name):
         self.table_name = table_name
         self.table_id = table_name + '_id'
-        
-    def query_select_all(self):
-        return 'SELECT * FROM %s' % self.table_name
+    
+    def query_count(self):
+        return 'SELECT count(*) total_results FROM %s' % self.table_name
+    
+    def query_select_all(self, order_by=None, limit_ini=None, limit_end=None):
+        return 'SELECT * FROM %s%s%s%s' % (self.table_name,
+                                           ' ORDER BY %s' % order_by if order_by else '',
+                                           ' LIMIT %s' % limit_ini if limit_ini else '',
+                                           ', %s' % limit_end if limit_end else '')
+
 
     def query_select_by_id(self, id_autonumeric):
         return 'SELECT * FROM %s WHERE %s = :%s' % (self.table_name,
@@ -39,18 +46,24 @@ class DAO:
         id = dict.pop(self.table_id, None)
         if id:
             cols = dict.keys()  
-            stmt = 'UPDATE %s SET %s' % (self.table_name,
-                                         ', '.join(["%s = :%s" % (col, col)  for col in cols]))
+            stmt = 'UPDATE %s SET %s WHERE %s = :%s' % (self.table_name,
+                                         ', '.join(["%s = :%s" % (col, col)  for col in cols]),
+                                         self.table_id,
+                                         self.table_id)
             dict[self.table_id] = id
             return stmt
 
         
 if __name__ == "__main__":
     testDAO = DAO('test')
+    row = {'color':'red', 'number': 2}
+    print testDAO.query_count()
     print testDAO.query_select_all()
+    print testDAO.query_select_all(limit_ini=20)
+    print testDAO.query_select_all('my_column', 30, 50)
     print testDAO.query_select_by_id(4)
-    print testDAO.query_insert({'color':'red', 'number': 2})
+    print testDAO.query_insert(row)
+    row[testDAO.table_id] = 2
+    print testDAO.query_update(row)
     print testDAO.query_delete(4)
-    d = {testDAO.table_id:2, 'color':'red', 'number': 2}
-    print testDAO.query_update(d)
-    print d
+    print row

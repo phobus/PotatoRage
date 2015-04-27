@@ -114,7 +114,8 @@ class TheMovieDb(Indexer):
                                 'overview': ep['overview'],
                                 #
                                 'season_number': dict['season_number']})
-        return {'episodes': results}
+        return results
+        #return {'episodes': results}
         """return {'indexer': self.name,
                 'id': dict['id'],
                 'title': dict['name'],

@@ -7,6 +7,9 @@ class episodeDAO(DAO):
     def __init__(self):
         DAO.__init__(self, 'episode')
     
-    def insert_season(self, dict):
-        for ep in dict['episodes']:
-            print self.query_insert(ep)
+    def insert_seasons(self, seasons):
+        query = self.query_insert(seasons[0][0])
+        print query
+        for s in seasons:
+            for ep in s:
+                print ep

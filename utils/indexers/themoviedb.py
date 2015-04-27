@@ -19,7 +19,7 @@ class TheMovieDb(Indexer):
         #
         self.config['url_config'] = u'%(base_url)s/configuration?api_key=%(api_key)s' % self.config
         self.config['url_search'] = u'%(base_url)s/search/%%s?api_key=%(api_key)s&language=%(language)s&query=%%s&page=%%s' % self.config
-        self.config['url_get'] = u'%(base_url)s/%%s/%%s?api_key=%(api_key)s&language=%(language)s' % self.config
+        self.config['url_get'] = u'%(base_url)s/%%s/%%s?api_key=%(api_key)s&language=%(language)s&append_to_response=external_ids' % self.config
         self.config['url_get_season'] = u'%(base_url)s/tv/%%s/season/%%s?api_key=%(api_key)s&language=%(language)s' % self.config
         
         #
@@ -93,7 +93,7 @@ class TheMovieDb(Indexer):
             return {'indexer': self.name,
                     'id': dict['id'],
                     'title': dict['name'],
-                    'imdb_id': None,
+                    'imdb_id': dict['external_ids']['imdb_id'],
                     'date': dict['first_air_date'],
                     'rating': dict['vote_average'],
                     'status': dict['status'],

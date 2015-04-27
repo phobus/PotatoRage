@@ -137,21 +137,21 @@ Nav
 	border-bottom: 1px solid gray;
 }
 
-.nav a:link { color: #96c93c; }
-.nav a:visited { color: #96c93c; }
+.nav a:link { color: #FFF; }
+.nav a:visited { color: #FFF; }
 
 .nav a:focus
 {
 	/*color: black;
 	background-color: white;*/
-	color: #FFF;
+	color: #96c93c;
 }
 
 .nav a:hover
 {
 	/*color: white;
 	background-color: green;*/
-	color: #FFF;
+	color: #96c93c;
 }
 
 .nav a:active

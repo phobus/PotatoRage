@@ -18,7 +18,8 @@
 				type : 'text'
 			}).appendTo(this.panel_search);
 			this.button = $("<button>", {
-				text : "Buscar"
+				text : 'Buscar',
+				class: 'btn'
 			}).appendTo(this.panel_search);
 
 			this.table = $('<table/>').appendTo(this.element);

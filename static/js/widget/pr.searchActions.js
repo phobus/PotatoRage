@@ -15,11 +15,13 @@
 			this.element.addClass('ui-widget pr-search-actions');
 
 			this.save = $("<button>", {
-				text : "Añadir a mi coleccion"
+				text : 'Añadir a mi coleccion',
+				class: 'btn'
 			}).appendTo(this.element);
 
 			this.back = $("<button>", {
-				text : "Volver a la busqueda"
+				text : 'Volver a la busqueda',
+				class: 'btn'
 			}).appendTo(this.element);
 
 			this._on(this.save, {

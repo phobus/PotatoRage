@@ -13,8 +13,9 @@ def query_media(indexer, media, query, page):
         
     if not indexer:
         indexer = _current_indexer(media)
-        
-    return idx[indexer].search(media, query, page)
+    
+    if query:
+        return idx[indexer].search(media, query, page)
 
 def get_media(indexer, media, id):
     if not indexer:

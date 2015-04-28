@@ -8,7 +8,7 @@ License: MIT (see LICENSE for details)
 """
 
 import os, sys, logging
-from bottle import route, view
+from bottle import route, view, abort
 
 log = logging.getLogger()
 

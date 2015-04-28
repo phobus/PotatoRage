@@ -19,6 +19,7 @@ def docs():
     routes = []
     modules = {}
     for route in app().routes:
+        print route
         doc = inspect.getdoc(route.callback) or inspect.getcomments(route.callback)
         if not doc:
             doc = ''
@@ -33,4 +34,5 @@ def docs():
         if not module in modules:
             modules[module] = []
         modules[module].append(item)
+    print modules
     return modules

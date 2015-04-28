@@ -7,14 +7,23 @@ AUTOINCREMENT field is: table name + '_id'
 
 don't try it at home, better take ORM
 """
-    
+
+import db
+
 class DAO:
     def __init__(self, table_name):
         self.table_name = table_name
         self.table_id = table_name + '_id'
     
     def query_count(self):
-        return 'SELECT count(*) total_results FROM %s' % self.table_name
+        # with sqlite3.connect(db_filename) as conn:
+        con = db.create_con()
+        cur = con.cursor()
+        
+        cur.execute('SELECT count(*) total_results FROM %s' % self.table_name)
+        
+        result = cur.fetchall()
+        return result[0]['total_results']
     
     def query_select_all(self, order_by=None, limit_ini=None, limit_end=None):
         return 'SELECT * FROM %s%s%s%s' % (self.table_name,
@@ -34,6 +43,7 @@ class DAO:
                                                   self.table_id)
         
     def query_insert(self, dict):
+        # cur.lastrowid
         id = dict.pop(self.table_id, None)
         if not id:
             cols = dict.keys()  
@@ -55,7 +65,7 @@ class DAO:
 
         
 if __name__ == "__main__":
-    testDAO = DAO('test')
+    testDAO = DAO('tv')
     row = {'color':'red', 'number': 2}
     print testDAO.query_count()
     print testDAO.query_select_all()

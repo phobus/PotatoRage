@@ -4,7 +4,8 @@
 		options : {
 			media : null,
 			indexer : null,
-			id : null
+			id : null,
+			test: 'http://image.tmdb.org/t/p/w154/'
 		},
 
 		_create : function() {
@@ -100,7 +101,7 @@
 					widget.overview.text(data.overview);
 					widget.rating.text(data.rating);
 
-					widget.poster.attr('src', data.poster);
+					widget.poster.attr('src', widget.options.test + data.poster);
 					widget.panel_links.append(widget._createLinks(
 							widget.options.media, data.id, data.imdb_id));
 

@@ -8,39 +8,49 @@ AUTOINCREMENT field is: table name + '_id'
 don't try it at home, better take ORM
 """
 
-import db
+from models import db
 
 class DAO:
-    def __init__(self, table_name):
+    def __init__(self, table_name, con=db):
         self.table_name = table_name
         self.table_id = table_name + '_id'
-    
-    def query_count(self):
+        self.con = con
+        
+    def count(self):
         # with sqlite3.connect(db_filename) as conn:
-        con = db.create_con()
-        cur = con.cursor()
-        
+        cur = self.con.cursor()
         cur.execute('SELECT count(*) total_results FROM %s' % self.table_name)
-        
-        result = cur.fetchall()
-        return result[0]['total_results']
+        result = cur.fetchone()
+        cur.close()
+        return result
     
-    def query_select_all(self, order_by=None, limit_ini=None, limit_end=None):
-        return 'SELECT * FROM %s%s%s%s' % (self.table_name,
+    def select_all(self, order_by=None, limit_ini=None, limit_end=None):
+        cur = self.con.cursor()
+        cur.execute('SELECT * FROM %s%s%s%s' % (self.table_name,
                                            ' ORDER BY %s' % order_by if order_by else '',
                                            ' LIMIT %s' % limit_ini if limit_ini else '',
-                                           ', %s' % limit_end if limit_end else '')
+                                           ', %s' % limit_end if limit_end else ''))
+        result = cur.fetchall()
+        cur.close()
+        return result
 
-
-    def query_select_by_id(self, id_autonumeric):
-        return 'SELECT * FROM %s WHERE %s = :%s' % (self.table_name,
+    def select_by_id(self, id_autonumeric):
+        cur = self.con.cursor()
+        cur.execute('SELECT * FROM %s WHERE %s = :%s' % (self.table_name,
                                                     self.table_id,
-                                                    self.table_id)
+                                                    self.table_id))
+        result = cur.fetchone()
+        cur.close()
+        return result
         
-    def query_delete(self, id_autonumeric):
-        return 'DELETE FROM %s WHERE %s = :%s' % (self.table_name,
+    def delete(self, id_autonumeric):
+        cur = self.con.cursor()
+        cur.execute('DELETE FROM %s WHERE %s = :%s' % (self.table_name,
                                                   self.table_id,
-                                                  self.table_id)
+                                                  self.table_id))
+        result = cur.fetchone()
+        cur.close()
+        return result
         
     def query_insert(self, dict):
         # cur.lastrowid
@@ -67,10 +77,10 @@ class DAO:
 if __name__ == "__main__":
     testDAO = DAO('tv')
     row = {'color':'red', 'number': 2}
-    print testDAO.query_count()
-    print testDAO.query_select_all()
-    print testDAO.query_select_all(limit_ini=20)
-    print testDAO.query_select_all('my_column', 30, 50)
+    print testDAO.count()
+    print testDAO.select_all()
+    print testDAO.select_all(limit_ini=20)
+    print testDAO.select_all('tv_id', 30, 50)
     print testDAO.query_select_by_id(4)
     print testDAO.query_insert(row)
     row[testDAO.table_id] = 2

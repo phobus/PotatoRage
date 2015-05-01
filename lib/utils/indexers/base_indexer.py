@@ -7,8 +7,6 @@ import json
 import logging, utils.logger
 log = logging.getLogger(__name__)
 
-from tvdb_cache import CacheHandler
-
 
 
 class Indexer:
@@ -20,13 +18,11 @@ class Indexer:
     def _requestJson(self, url):
         log.info('Retrieving URL %s' % url)
         #response = urllib2.urlopen(url)
-        urlopener = urllib2.build_opener(CacheHandler('/home/neganix/git/Pyster/data/cache/'))
-        response = urlopener.open(url)
-        if 'x-local-cache' in response.headers:
-                    log().debug("URL %s was cached in %s" % (
-                        url,
-                        response.headers['x-local-cache'])
-                    )
+        from tvdb_cache import CacheHandler
+        opener = urllib2.build_opener(CacheHandler("/home/neganix/git/Pyster/data/cache/"))
+        response = opener.open(url)
+        #response.recache()
+
         """if recache:
             log().debug("Attempting to recache %s" % url)
             response.recache()"""

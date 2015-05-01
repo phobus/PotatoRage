@@ -15,7 +15,7 @@ class TheMovieDb(Indexer):
         self.config['language'] = language
         
         # URLs
-        self.config['base_url'] = u'https://api.themoviedb.org/%(version)s' % self.config
+        self.config['base_url'] = u'http://api.themoviedb.org/%(version)s' % self.config
         #
         self.config['url_config'] = u'%(base_url)s/configuration?api_key=%(api_key)s' % self.config
         self.config['url_search'] = u'%(base_url)s/search/%%s?api_key=%(api_key)s&language=%(language)s&query=%%s&page=%%s' % self.config
@@ -56,10 +56,10 @@ class TheMovieDb(Indexer):
             dict = Indexer._requestJson(self, self.config['url_get'] % (media, id))
             return self._parse_media(media, dict)
         
-    def get_season(self, id, season):
+    def get_season(self, id, season, tv_id):
         # id = urllib.quote(id.encode("utf-8"))
         dict = Indexer._requestJson(self, self.config['url_get_season'] % (id, season))
-        return self._parse_season(dict)
+        return self._parse_season(dict, tv_id)
     
     def _parse_search(self, media, dict):
         results = []
@@ -103,10 +103,11 @@ class TheMovieDb(Indexer):
                     'n_episodes': dict['number_of_episodes'],
                     'n_seasons': dict['number_of_seasons']}
     
-    def _parse_season(self, dict):
+    def _parse_season(self, dict, tv_id):
         results = []
         for ep in dict['episodes']:
-                results.append({'indexer': self.name,
+                results.append({'tv_id': tv_id,
+                                'indexer': self.name,
                                 'id': ep['id'],
                                 'title': ep['name'],
                                 'episode_number': ep['episode_number'],
@@ -115,7 +116,7 @@ class TheMovieDb(Indexer):
                                 #
                                 'season_number': dict['season_number']})
         return results
-        #return {'episodes': results}
+        # return {'episodes': results}
         """return {'indexer': self.name,
                 'id': dict['id'],
                 'title': dict['name'],

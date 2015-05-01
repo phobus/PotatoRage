@@ -8,7 +8,9 @@ AUTOINCREMENT field is: table name + '_id'
 don't try it at home, better take ORM
 """
 
-from models import db
+# from models import db
+from db import create_con
+db = create_con()
 
 class DAO:
     def __init__(self, table_name, con=db):
@@ -16,74 +18,85 @@ class DAO:
         self.table_id = table_name + '_id'
         self.con = con
         
+        self.query = {}
+        
+        self.query['count'] = 'SELECT count(*) total_results FROM %s' % self.table_name
+        self.query['select_all'] = 'SELECT * FROM %s %%s%%s%%s' % self.table_name
+        self.query['select_by_id'] = 'SELECT * FROM %s WHERE %s = ?' % (self.table_name, self.table_id)
+        self.query['delete'] = 'DELETE FROM %s WHERE %s = ?' % (self.table_name, self.table_id)
+        self.query['insert'] = 'INSERT INTO %s (%%s) VALUES (%%s)' % self.table_name
+        self.query['update'] = 'UPDATE %s SET %%s WHERE %s = :%s' % (self.table_name,
+                                                                     self.table_id,
+                                                                     self.table_id)
+        
     def count(self):
-        # with sqlite3.connect(db_filename) as conn:
         cur = self.con.cursor()
-        cur.execute('SELECT count(*) total_results FROM %s' % self.table_name)
+        cur.execute(self.query['count'])
         result = cur.fetchone()
         cur.close()
         return result
     
     def select_all(self, order_by=None, limit_ini=None, limit_end=None):
         cur = self.con.cursor()
-        cur.execute('SELECT * FROM %s%s%s%s' % (self.table_name,
-                                           ' ORDER BY %s' % order_by if order_by else '',
+        stmt = self.query['select_all'] % (' ORDER BY %s' % order_by if order_by else '',
                                            ' LIMIT %s' % limit_ini if limit_ini else '',
-                                           ', %s' % limit_end if limit_end else ''))
+                                           ', %s' % limit_end if limit_end else '')
+        cur.execute(stmt)
         result = cur.fetchall()
         cur.close()
         return result
 
     def select_by_id(self, id_autonumeric):
         cur = self.con.cursor()
-        cur.execute('SELECT * FROM %s WHERE %s = :%s' % (self.table_name,
-                                                    self.table_id,
-                                                    self.table_id))
+        cur.execute(self.query['select_by_id'], (id_autonumeric,))
         result = cur.fetchone()
         cur.close()
         return result
         
     def delete(self, id_autonumeric):
         cur = self.con.cursor()
-        cur.execute('DELETE FROM %s WHERE %s = :%s' % (self.table_name,
-                                                  self.table_id,
-                                                  self.table_id))
-        result = cur.fetchone()
+        cur.execute(self.query['delete'], (id_autonumeric,))
+        result = cur.rowcount
         cur.close()
         return result
         
-    def query_insert(self, dict):
-        # cur.lastrowid
+    def insert(self, dict):
         id = dict.pop(self.table_id, None)
         if not id:
-            cols = dict.keys()  
-            stmt = 'INSERT INTO %s (%s) VALUES (%s)' % (self.table_name,
-                                                       ', '.join(cols),
-                                                       ', '.join([":%s" % col for col in cols]))
-            return stmt
-    
-    def query_update(self, dict):
+            cols = dict.keys()
+            stmt = self.query['insert'] % (', '.join(cols),
+                                           ', '.join([":%s" % col for col in cols]))
+            cur = self.con.cursor()
+            cur.execute(stmt, dict)
+            result = cur.rowcount
+            dict[self.table_id] = cur.lastrowid
+            cur.close()
+            return result
+        
+    def insert_many(self, dict):
+        #id = dict.pop(self.table_id, None)
+        #if not id:
+        cols = dict[0].keys()
+        stmt = self.query['insert'] % (', '.join(cols),
+                                       ', '.join([":%s" % col for col in cols]))
+        cur = self.con.cursor()
+        cur.executemany(stmt, dict)
+        result = cur.rowcount
+        #dict[self.table_id] = cur.lastrowid
+        cur.close()
+        return result
+        
+    def update(self, dict):
         id = dict.pop(self.table_id, None)
         if id:
             cols = dict.keys()  
-            stmt = 'UPDATE %s SET %s WHERE %s = :%s' % (self.table_name,
-                                         ', '.join(["%s = :%s" % (col, col)  for col in cols]),
-                                         self.table_id,
-                                         self.table_id)
+            stmt = self.query['update'] % ', '.join(["%s = :%s" % (col, col)  for col in cols])
             dict[self.table_id] = id
-            return stmt
+            cur = self.con.cursor()
+            cur.execute(stmt, dict)
+            result = cur.rowcount
+            cur.close()
+            return result
 
-        
-if __name__ == "__main__":
-    testDAO = DAO('tv')
-    row = {'color':'red', 'number': 2}
-    print testDAO.count()
-    print testDAO.select_all()
-    print testDAO.select_all(limit_ini=20)
-    print testDAO.select_all('tv_id', 30, 50)
-    print testDAO.query_select_by_id(4)
-    print testDAO.query_insert(row)
-    row[testDAO.table_id] = 2
-    print testDAO.query_update(row)
-    print testDAO.query_delete(4)
-    print row
+    def commit(self):
+        db.commit()   

@@ -30,13 +30,15 @@ def append_media(indexer, media, id):
     data = idx[indexer].get_media(media, id)
     
     if media == 'movie':
-        print movieDAO().query_insert(data)
+        movieDAO().insert(data)
+        pass
     elif media == 'tv':
-        print tvDAO().query_insert(data)
-        seasons = []
+        tvDAO().insert(data)
+        eps = []
         for n_season in range(data['n_seasons']):
-            seasons.append(idx[indexer].get_season(data['id'], n_season + 1))
-        episodeDAO().insert_seasons(seasons)
+            eps.extend(idx[indexer].get_season(data['id'], n_season + 1, data['tv_id']))
+        episodeDAO().insert_many(eps)
+    episodeDAO().commit()
     return {}
 
 def _current_indexer(media):

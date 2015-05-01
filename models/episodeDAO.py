@@ -4,5 +4,5 @@
 from base_DAO import DAO
 
 class episodeDAO(DAO):
-    def __init__(self):
-        DAO.__init__(self, 'episode')
+    def __init__(self, con):
+        DAO.__init__(self, 'episode', con)

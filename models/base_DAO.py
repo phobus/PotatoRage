@@ -8,12 +8,10 @@ AUTOINCREMENT field is: table name + '_id'
 don't try it at home, better take ORM
 """
 
-# from models import db
 from db import create_con
-db = create_con()
 
 class DAO:
-    def __init__(self, table_name, con=db):
+    def __init__(self, table_name, con):
         self.table_name = table_name
         self.table_id = table_name + '_id'
         self.con = con
@@ -99,4 +97,4 @@ class DAO:
             return result
 
     def commit(self):
-        db.commit()   
+        con.commit()   

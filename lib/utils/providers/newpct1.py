@@ -32,87 +32,49 @@ class newpct1(Povider):
         self.url_ep_torrent = u'%s/descarga-torrent/serie/%%s/capitulo-' % self.base_url
 
         self.url_search = u'%s/index.php?page=buscar&q=%%s&ordenar=Nombre&inon=Ascendente' % self.base_url
-    
-    def get_torrent3(self, media, query):
-        from bs4 import BeautifulSoup
-        
-        if media == self.media[0]:
-            url = self.url_search % query
-            print url
-            
-            opener = urllib2.build_opener(CacheHandler("/home/neganix/git/Pyster/data/cache/"))
-            response = opener.open(url)
-            data = response.read()
-            
-            soup = BeautifulSoup(data)
-            search_list = soup.find('ul', {'class':'buscar-list'})
-            
-            print search_list
-            for anchor in search_list.find_all('a'):
-                print(anchor.get('href', '/')), (anchor.get('title', '/'))
-            
-    def get_torrent2(self, media, query):
-        try:
-            import xml.etree.cElementTree as ElementTree
-        except ImportError:
-            import xml.etree.ElementTree as ElementTree
-            
-        if media == self.media[0]:
-            url = self.url_search % query
-            print url
-            
-            opener = urllib2.build_opener(CacheHandler("/home/neganix/git/Pyster/data/cache/"))
-            response = opener.open(url)
-            data = response.read()
-            
-            et = ElementTree.fromstring(data)
-            for link in et.iter('a'):
-                print link.attrib
 
-    def get_torrent1(self, media, query):
+        self.category_movie = 757
+        self.category_tv = 767
+        
+        self.page_results = 30
+        
+    def get_torrent(self, media, query):
         import re
         
         if media == self.media[0]:
             url = self.url_search % query
             print url
             opener = urllib2.build_opener(CacheHandler("/home/neganix/git/Pyster/data/cache/"))
-            #opener = urllib2.build_opener()
-            #opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-            opener.addheaders = [('Accept-Charset', 'iso-8859-1')]
             response = opener.open(url)
-            data = response.read().decode('iso-8859-1')
-            #print data
-            # pattern = r'<a\shref=[\'"]?([^\'" >]+%s)' % query
-            # pattern = r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"'
-            # pattern = r'(<a.*?>.*?</a>)'
-            # pattern = r'(<a.*?>.*?interstellar.*?</a>)'
-            # pattern = r'<ul class="buscar-list">.*?</ul>'
-            # pattern = r'<\s*\w*\s*href\s*=\s*"?\s*([\w\s%#\/\.;:_-]*)\s*"?.*?>'
-            # pattern = r'<ul class="buscar-list">(.*?)<\/ul><!-- end .buscar-list -->'
+            data = response.read().decode('iso-8859-1').encode('utf8')
+
+            pattern = r'\( \d+ \) Resultados encontrados'
+            search = re.search(pattern, data)
+            results = int(search.group().split()[1])
+            print results, int(round(float(results) / self.page_results))
+            return
+        
             pattern = r'(<ul class="buscar-list">(.|\n)*?</ul><!-- end .buscar-list -->)'
             search = re.search(pattern, data)
             if search:
-                # print search.group()
-                # for item in enumerate(re.findall(pattern, data)):
-                # pattern = r'((href|title)=".*?")'
-                # pattern = r'\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))'
                 pattern = r'(<a.*?>)'
-                html = '<root>'
+                html = '<p>'
                 for item in re.finditer(pattern, search.group()):
-                    print item.group()
-                    html += item.group() + '</a>'
-                html += '</root>'
-                #print html
+                    html += '%s</a>' % item.group()
+                html += '</p>'
+                
                 try:
                     import xml.etree.cElementTree as ElementTree
                 except ImportError:
                     import xml.etree.ElementTree as ElementTree
                 
                 et = ElementTree.fromstring(html)
+                output = {}
                 for link in et.iter('a'):
-                    print link.attrib
-# http://www.dotnetperls.com/scraping-html
-# http://stackoverflow.com/questions/12479570/given-a-torrent-file-how-do-i-generate-a-magnet-link-in-python
+                    output[link.attrib['href']] = link.attrib['title'].strip()
+                for k, v in output.items():
+                    print 'k:%s, v:%s' % (k, v)
+
 if __name__ == "__main__":
-    newpct1().get_torrent1('movie', 'interstellar')
+    newpct1().get_torrent('movie', 'juego de tronos')
     pass

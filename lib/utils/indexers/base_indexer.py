@@ -8,6 +8,7 @@ import logging, utils.logger
 log = logging.getLogger(__name__)
 
 from tvdb_cache import CacheHandler
+from utils.config import settings
 
 class Indexer:
     def __init__(self, name, url, media):
@@ -19,7 +20,7 @@ class Indexer:
         log.info('Retrieving URL %s' % url)
         #response = urllib2.urlopen(url)
 
-        opener = urllib2.build_opener(CacheHandler("/home/neganix/git/Pyster/data/cache/"))
+        opener = urllib2.build_opener(CacheHandler(settings['folders']['cache']))
         response = opener.open(url)
         #response.recache()
 

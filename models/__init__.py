@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from db import create_con, exec_script
-# exec_script('/home/neganix/git/Pyster/models/sql/schema.sql')
 connection = create_con()
 
 from base_DAO import DAO

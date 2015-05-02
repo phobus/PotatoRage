@@ -94,7 +94,4 @@ class DAO:
             cur.execute(stmt, dict)
             result = cur.rowcount
             cur.close()
-            return result
-
-    def commit(self):
-        con.commit()   
+            return result 

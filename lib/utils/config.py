@@ -4,72 +4,43 @@
 import os
 import ConfigParser
 
-base_dir = os.path.realpath('.')
-data_dir = os.path.join(base_dir, 'data')
-sql_dir = patch = os.path.join(os.path.join(base_dir, 'models'), 'sql')
+import logging
+log = logging.getLogger(__name__)
 
-settings = {'folders':{}, 'files':{}, 'server':{}}
-
-settings['folders']['cache'] = os.path.join(data_dir, 'tmp')
-settings['folders']['img'] = os.path.join(data_dir, 'img')
-
-settings['files']['db'] = os.path.join(data_dir, 'pyster.sqlite')
-# settings['files']['log'] = os.path.join(data_dir, 'pyster.log')
-
-settings['server']['host'] = None
-settings['server']['port'] = None
-settings['server']['debug'] = True
-settings['server']['reloader'] = True
+def _default_settings(base_dir):
+    global settings
+    settings = {'folders':{}, 'files':{}, 'server':{}}
+    
+    settings['folders']['cache'] = os.path.join(os.path.join(base_dir, 'data'), 'cache')
+    settings['folders']['img'] = os.path.join(os.path.join(base_dir, 'data'), 'img')
+    
+    settings['files']['db'] = os.path.join(os.path.join(base_dir, 'data'), 'pyster.sqlite')
+    settings['files']['log'] = os.path.join(os.path.join(base_dir, 'log'), 'pyster.log')
+    
+    settings['server']['host'] = '0.0.0.0'
+    settings['server']['port'] = 8080
+    settings['server']['debug'] = True
+    settings['server']['reloader'] = True
        
-def parse_args():
+def _parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Star daemon and web server for Pyster %s the Torrent manager' % '0.6')
-    
-    # parser.add_argument('--daemon', action='store_true', help='run as daemon')
-    # parser.add_argument('--pidfile', help='Combined with --daemon creates a pidfile (full path including filename)')
-    
-    # parser.add_argument('--datadir', help='full path data folder')
-    parser.add_argument('--config', help='full path to the file')
-    
-    parser.add_argument('--port', type=int, default=8080, help='port to listen default 8080')
-    parser.add_argument('--host', default='0.0.0.0', help='host default 0.0.0.0')
-    
-    # group = parser.add_mutually_exclusive_group()
-    # group.add_argument('--start', action='store_true')
-    # group.add_argument('--stop', action='store_true')
-    # group.add_argument('--restart', action='store_true')
-    # group.add_argument('--status', action='store_true')
-    
-    args = parser.parse_args()
-    
-    settings['server']['host'] = args.host
-    settings['server']['port'] = args.port
-    
-    config_file = None
-    if args.config:
-        config_file = args.config
-    else:
-        config_file = os.path.join(os.path.join(base_dir, 'etc'), 'config.ini')
-        
-    if os.path.isfile(config_file):
-        load_settings(config_file)
-    else:
-        checkFolder(os.path.dirname(config_file))
-        save_settings(config_file)
-        checkFolder(data_dir)
-        checkFolder(settings['folders']['cache'])
-        checkFolder(settings['folders']['img'])
-        
-    check_config()
-        
-def load_settings(config_file):
+    parser.add_argument('--config', help='full path to the file default ./etc/config.ini')
+    parser.add_argument('--port', type=int, help='port to listen default 8080')
+    parser.add_argument('--host', help='host default 0.0.0.0')
+    return parser.parse_args()
+
+def _load_settings(config_file):
+    log.debug('Load settings: %s' % config_file)
     parser = ConfigParser.ConfigParser()
     parser.read(config_file)
+    opt = None
     for s in parser.sections():
         for o in parser.options(s):
             settings[s][o] = parser.get(s, o)
             
-def save_settings(config_file):
+def _save_settings(config_file):
+    log.debug('Save settings: %s' % config_file)
     parser = ConfigParser.ConfigParser()
     file = open(config_file, 'w')
     for sk, sv in settings.items():
@@ -79,25 +50,63 @@ def save_settings(config_file):
     parser.write(file)
     file.close()
     
-def check_config():
+def _check_config():
+    checkFolder(os.path.dirname(settings['files']['db']))
     if not os.path.isfile(settings['files']['db']):
+        log.debug('Creating db')
         from models import connection
         from models.db import exec_script
+        sql_dir = os.path.join(os.path.join(base_dir, 'models'), 'sql')
         exec_script(connection, os.path.join(sql_dir, 'schema.sql'))
-
-def checkFile(filepath):
-    if not os.access(filepath, os.W_OK):
-        if os.path.isfile(filepath):
-            raise SystemExit("File '%s' must be writable." % os.path.dirname(logfile))
-        elif not os.access(os.path.dirname(filepath), os.W_OK):
-            raise SystemExit("Folder '%s' must be writable." % os.path.dirname(logfile))
     
+    for file in settings['files'].values():
+        checkFolder(os.path.dirname(file))
+    for folder in settings['folders'].values():
+        checkFolder(folder)
+
+def _config_log():
+    import logging
+    logger = logging.getLogger()
+    handler = logging.StreamHandler()
+    
+    formatter = logging.Formatter(u'%(asctime)s %(levelname)s::%(message)s', '%H:%M:%S')
+    handler.setFormatter(formatter)
+    
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+       
 def checkFolder(folderpath):
     if not os.access(folderpath, os.F_OK):
         try:
+            log.debug('Make dir: %s' % folderpath)
             os.makedirs(folderpath, 0744)
         except os.error, e:
             raise SystemExit("Unable to create '%s'" % folderpath)
     
     if not os.access(folderpath, os.W_OK):
         raise SystemExit("Folder '%s' must be writable " % folderpath)
+
+try:
+    settings
+except NameError:
+    _config_log()
+    args = _parse_args()
+
+    base_dir = os.path.realpath('.')
+    config_file = args.config if args.config else os.path.join(os.path.join(base_dir, 'etc'), 'config.ini')
+    
+    _default_settings(base_dir)
+        
+    if os.path.isfile(config_file):
+        _load_settings(config_file)
+    else:
+        checkFolder(os.path.dirname(config_file))
+        _save_settings(config_file)
+        
+    if args.host:
+        settings['server']['host'] = args.host
+    
+    if args.port:
+        settings['server']['port'] = args.port
+    
+    _check_config()

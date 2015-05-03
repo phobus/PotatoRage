@@ -11,15 +11,12 @@ import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lib'))
 
 from bottle import run
+from utils.config import settings
 
-from utils.config import settings, parse_args
-
-import logging, utils.logger
+import logging
 log = logging.getLogger(__name__)
 
-if __name__ == "__main__":
-    parse_args()
-    
+if __name__ == "__main__":    
     if settings['server']['reloader']:
         if 'BOTTLE_CHILD' not in os.environ:
             log.debug('Using reloader, spawning first child.')
@@ -30,7 +27,7 @@ if __name__ == "__main__":
         log.info("Setting up application.")
         import api, routes, controllers
         log.info("Serving requests.")
-
+    
     run(port=settings['server']['port'],
         host=settings['server']['host'],
         debug=settings['server']['debug'],

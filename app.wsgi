@@ -7,6 +7,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import bottle
 # ... build or import your bottle application here ...
+from utils.config import settings, parse_args
 import api, routes, controllers
+parse_args()
 # Do NOT use bottle.run() with mod_wsgi
 application = bottle.default_app()

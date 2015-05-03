@@ -12,9 +12,14 @@ from bottle import route, static_file
 
 log = logging.getLogger()
 
+from utils.config import settings
 
 @route('/static/<path:path>')
 def send_static(path):
     """Static file handler"""
     return static_file(path, root='static')
 
+@route('/img/<path:path>')
+def send_static(path):
+    """Static file handler"""
+    return static_file(path, root=settings['folders']['img'])

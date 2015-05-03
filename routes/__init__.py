@@ -14,10 +14,7 @@ log = logging.getLogger()
 @route('/')
 @view('layout')
 def index():
-    return {
-        "title": "Homepage",
-        "body": "Welcome to ink-bottle!"
-    }
+    return
 
 # import all other routes
 import static, debug, docs

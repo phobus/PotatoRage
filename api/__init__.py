@@ -15,4 +15,4 @@ version = '1'
 prefix = '/v%s' % version
 
 # import route submodules here
-import indexer
+import indexer, movie, tv

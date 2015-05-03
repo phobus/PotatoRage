@@ -16,7 +16,7 @@ from utils.config import settings
 import logging
 log = logging.getLogger(__name__)
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     if settings['server']['reloader']:
         if 'BOTTLE_CHILD' not in os.environ:
             log.debug('Using reloader, spawning first child.')

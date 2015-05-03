@@ -26,7 +26,7 @@ def append_media(indexer, media, id):
         indexer = _current_indexer(media)
         
     data = idx[indexer].get_media(media, id)
-    
+    idx[indexer].store_img(data['poster'])
     if media == 'movie':
         DAO['movie'].insert(data)
     elif media == 'tv':
@@ -39,5 +39,7 @@ def append_media(indexer, media, id):
     return {}
 
 def _current_indexer(media):
-    return 'TheMovieDb'
-    
+    if media == 'movie':
+        return DAO['settings'].select_by_id('idx_movies')['value'];
+    elif media == 'tv':
+        return DAO['settings'].select_by_id('idx_tv')['value'];

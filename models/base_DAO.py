@@ -9,9 +9,9 @@ don't try it at home, better take ORM
 """
 
 class DataAccess:
-    def __init__(self, table_name, con):
+    def __init__(self, table_name, con, table_id=None):
         self.table_name = table_name
-        self.table_id = table_name + '_id'
+        self.table_id = table_id if table_id else table_name + '_id'
         self.con = con
         
         self.query = {}
@@ -70,15 +70,15 @@ class DataAccess:
             return result
         
     def insert_many(self, dict):
-        #id = dict.pop(self.table_id, None)
-        #if not id:
+        # id = dict.pop(self.table_id, None)
+        # if not id:
         cols = dict[0].keys()
         stmt = self.query['insert'] % (', '.join(cols),
                                        ', '.join([":%s" % col for col in cols]))
         cur = self.con.cursor()
         cur.executemany(stmt, dict)
         result = cur.rowcount
-        #dict[self.table_id] = cur.lastrowid
+        # dict[self.table_id] = cur.lastrowid
         cur.close()
         return result
         

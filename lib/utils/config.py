@@ -7,17 +7,17 @@ import ConfigParser
 import logging
 log = logging.getLogger(__name__)
 
-def _default_settings(base_dir):
+def _default_settings(_base_dir):
     global settings
     settings = {'folders':{}, 'files':{}, 'server':{}}
     
-    settings['folders']['cache'] = os.path.join(os.path.join(base_dir, 'data'), 'cache')
-    settings['folders']['img'] = os.path.join(os.path.join(base_dir, 'data'), 'img')
+    settings['folders']['cache'] = os.path.join(os.path.join(_base_dir, 'data'), 'cache')
+    settings['folders']['img'] = os.path.join(os.path.join(_base_dir, 'data'), 'img')
     
-    settings['folders']['sql_dir'] = sql_dir = os.path.join(os.path.join(base_dir, 'models'), 'sql')
+    settings['folders']['sql_dir'] = sql_dir = os.path.join(os.path.join(_base_dir, 'models'), 'sql')
     
-    settings['files']['db'] = os.path.join(os.path.join(base_dir, 'data'), 'pyster.sqlite')
-    settings['files']['log'] = os.path.join(os.path.join(base_dir, 'log'), 'pyster.log')
+    settings['files']['db'] = os.path.join(os.path.join(_base_dir, 'data'), 'pyster.sqlite')
+    settings['files']['log'] = os.path.join(os.path.join(_base_dir, 'log'), 'pyster.log')
     
     settings['server']['host'] = '0.0.0.0'
     settings['server']['port'] = 8080
@@ -32,19 +32,19 @@ def _parse_args():
     parser.add_argument('--host', help='host default 0.0.0.0')
     return parser.parse_args()
 
-def _load_settings(config_file):
-    log.debug('Load settings: %s' % config_file)
+def _load_settings(_config_file):
+    log.debug('Load settings: %s' % _config_file)
     parser = ConfigParser.ConfigParser()
-    parser.read(config_file)
+    parser.read(_config_file)
     opt = None
     for s in parser.sections():
         for o in parser.options(s):
             settings[s][o] = parser.get(s, o)
             
-def _save_settings(config_file):
-    log.debug('Save settings: %s' % config_file)
+def _save_settings(_config_file):
+    log.debug('Save settings: %s' % _config_file)
     parser = ConfigParser.ConfigParser()
-    file = open(config_file, 'w')
+    file = open(_config_file, 'w')
     for sk, sv in settings.items():
         parser.add_section(sk)
         for k, v in sv.items():
@@ -89,23 +89,23 @@ try:
     settings
 except NameError:
     _config_log()
-    args = _parse_args()
+    _args = _parse_args()
 
-    base_dir = os.path.realpath('.')
-    config_file = args.config if args.config else os.path.join(os.path.join(base_dir, 'etc'), 'config.ini')
+    _base_dir = os.path.realpath('.')
+    _config_file = _args.config if _args.config else os.path.join(os.path.join(_base_dir, 'etc'), 'config.ini')
     
-    _default_settings(base_dir)
+    _default_settings(_base_dir)
         
-    if os.path.isfile(config_file):
-        _load_settings(config_file)
+    if os.path.isfile(_config_file):
+        _load_settings(_config_file)
     else:
-        checkFolder(os.path.dirname(config_file))
-        _save_settings(config_file)
+        checkFolder(os.path.dirname(_config_file))
+        _save_settings(_config_file)
         
-    if args.host:
-        settings['server']['host'] = args.host
+    if _args.host:
+        settings['server']['host'] = _args.host
     
-    if args.port:
-        settings['server']['port'] = args.port
+    if _args.port:
+        settings['server']['port'] = _args.port
     
     _check_config()

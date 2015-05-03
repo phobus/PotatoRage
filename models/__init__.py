@@ -23,7 +23,7 @@ def init_dao():
     o = DataAccess('episode', connection)
     DAO[o.table_name] = o
     
-    o = DataAccess('settings', connection)
+    o = DataAccess('settings', connection, 'name')
     DAO[o.table_name] = o
     
     return DAO
@@ -34,6 +34,6 @@ def commit():
 try:
     connection
 except NameError:
-    log.debug('Init database')
+    log.debug('Init Database')
     
     init_dao()

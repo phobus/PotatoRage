@@ -4,7 +4,7 @@
 import urllib2
 import json
 
-import logging, utils.logger
+import logging
 log = logging.getLogger(__name__)
 
 from tvdb_cache import CacheHandler

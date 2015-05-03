@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+from utils.config import settings
+
+import logging
+log = logging.getLogger(__name__)
 
 def dict_factory(cursor, row):
     d = {}
@@ -10,35 +14,40 @@ def dict_factory(cursor, row):
     return d
 
 def create_con():
-    from utils.config import settings
-
+    log.debug('Create connection %s' % settings['files']['db'])
     con = sqlite3.connect(settings['files']['db'])
-    # con.row_factory = sqlite3.Row
     con.row_factory = dict_factory 
     return con
 
-def exec_script(con, file_name):
+def exec_script(file_name):
     try:
-        # con = create_con()
-        cur = con.cursor()
-        
+        from models import connection
+
+        cur = connection.cursor()
+        log.debug('Execute script %s' % file_name)
         cur.executescript(open(file_name, 'r').read())
         
         cur.close()
-        con.commit()
-        
-        # cur.close()
-        # con.close()
+        connection.commit()
     
     except lite.Error, e:
-        if con:
-            con.rollback()
-            
-        print "Error %s:" % e.args[0]
+        if connection:
+            connection.rollback()
+        
+        log.error("Error %s:" % e.args[0])
         sys.exit(1)
         
     finally:
-        if con:
-            con.close() 
+        if cur:
+            cur.close() 
 
-        
+def create_db():
+    log.debug('Creating DB')
+    import os
+    exec_script(os.path.join(settings['folders']['sql_dir'], 'schema.sql'))
+    
+    from models import DAO, commit 
+    from utils.indexers import idx
+    url_img = idx['TheMovieDb'].load_config()
+    DAO['settings'].insert({'name':'TheMovieDb.img', 'value':url_img})
+    commit()

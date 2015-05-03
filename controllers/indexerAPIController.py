@@ -3,7 +3,7 @@
 
 from utils.indexers import idx
 
-from models import connection, movieDAO, tvDAO, episodeDAO
+from models import DAO, commit
 
 def query_media(indexer, media, query, page):
     if not page:
@@ -28,15 +28,14 @@ def append_media(indexer, media, id):
     data = idx[indexer].get_media(media, id)
     
     if media == 'movie':
-        movieDAO.insert(data)
-        pass
+        DAO['movie'].insert(data)
     elif media == 'tv':
-        tvDAO.insert(data)
+        DAO['tv'].insert(data)
         eps = []
         for n_season in range(data['n_seasons']):
             eps.extend(idx[indexer].get_season(data['id'], n_season + 1, data['tv_id']))
-        episodeDAO.insert_many(eps)
-    connection.commit()
+        DAO['episode'].insert_many(eps)
+    commit()
     return {}
 
 def _current_indexer(media):

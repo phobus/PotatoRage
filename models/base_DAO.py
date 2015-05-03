@@ -8,9 +8,7 @@ AUTOINCREMENT field is: table name + '_id'
 don't try it at home, better take ORM
 """
 
-from db import create_con
-
-class DAO:
+class DataAccess:
     def __init__(self, table_name, con):
         self.table_name = table_name
         self.table_id = table_name + '_id'

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from base_DAO import DAO
+from base_DAO import DataAccess
 
-class movieDAO(DAO):
+class movieDAO(DataAccess):
     def __init__(self, con):
-        DAO.__init__(self, 'movie', con)
+        DataAccess.__init__(self, 'movie', con)
         self.query['check_by_imdb'] = self.query['count'] + ' WHERE imdb_id = ?'
         self.query['check_idx_id'] = self.query['count'] + ' WHERE indexer = ? AND id = ?'
         

@@ -14,6 +14,8 @@ def _default_settings(base_dir):
     settings['folders']['cache'] = os.path.join(os.path.join(base_dir, 'data'), 'cache')
     settings['folders']['img'] = os.path.join(os.path.join(base_dir, 'data'), 'img')
     
+    settings['folders']['sql_dir'] = sql_dir = os.path.join(os.path.join(base_dir, 'models'), 'sql')
+    
     settings['files']['db'] = os.path.join(os.path.join(base_dir, 'data'), 'pyster.sqlite')
     settings['files']['log'] = os.path.join(os.path.join(base_dir, 'log'), 'pyster.log')
     
@@ -53,11 +55,8 @@ def _save_settings(config_file):
 def _check_config():
     checkFolder(os.path.dirname(settings['files']['db']))
     if not os.path.isfile(settings['files']['db']):
-        log.debug('Creating db')
-        from models import connection
-        from models.db import exec_script
-        sql_dir = os.path.join(os.path.join(base_dir, 'models'), 'sql')
-        exec_script(connection, os.path.join(sql_dir, 'schema.sql'))
+        from models.db import create_db
+        create_db()
     
     for file in settings['files'].values():
         checkFolder(os.path.dirname(file))
@@ -85,7 +84,7 @@ def checkFolder(folderpath):
     
     if not os.access(folderpath, os.W_OK):
         raise SystemExit("Folder '%s' must be writable " % folderpath)
-
+    
 try:
     settings
 except NameError:

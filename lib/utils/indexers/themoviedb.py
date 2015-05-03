@@ -23,15 +23,15 @@ class TheMovieDb(Indexer):
         self.config['url_get_season'] = u'%(base_url)s/tv/%%s/season/%%s?api_key=%(api_key)s&language=%(language)s' % self.config
         
         #
-        self.url_img = None
+        # self.url_img = None
         # self._load_config()
 
-    def _load_config(self):
+    def load_config(self):
         """
         load configuration from TheMovieDb
         """
         dict = Indexer._requestJson(self, self.config['url_config'])
-        self.url_img = dict['images']['base_url'] + dict['images']['poster_sizes'][1]
+        return dict['images']['base_url'] + dict['images']['poster_sizes'][1]
 
     def search(self, media, query, page=1):
         """

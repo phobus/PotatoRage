@@ -7,7 +7,7 @@ from utils.config import settings
 import logging
 log = logging.getLogger(__name__)
 
-def dict_factory(cursor, row):
+def _dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
@@ -16,7 +16,7 @@ def dict_factory(cursor, row):
 def create_con():
     log.debug('Create connection %s' % settings['files']['db'])
     con = sqlite3.connect(settings['files']['db'])
-    con.row_factory = dict_factory 
+    con.row_factory = _dict_factory 
     return con
 
 def exec_script(file_name):

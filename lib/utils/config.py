@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import ConfigParser
-
 import logging
 log = logging.getLogger(__name__)
 
@@ -33,6 +30,7 @@ def _parse_args():
     return parser.parse_args()
 
 def _load_settings(_config_file):
+    import ConfigParser
     log.debug('Load settings: %s' % _config_file)
     parser = ConfigParser.ConfigParser()
     parser.read(_config_file)
@@ -42,6 +40,7 @@ def _load_settings(_config_file):
             settings[s][o] = parser.get(s, o)
             
 def _save_settings(_config_file):
+    import ConfigParser
     log.debug('Save settings: %s' % _config_file)
     parser = ConfigParser.ConfigParser()
     file = open(_config_file, 'w')
@@ -66,7 +65,8 @@ def _check_config():
 def _config_log():
     import logging
     logger = logging.getLogger()
-    handler = logging.StreamHandler()
+    #handler = logging.StreamHandler()
+    handler = logging.FileHandler('/home/neganix/git/Pyster/log/pyster.log')
     
     formatter = logging.Formatter(u'%(asctime)s %(levelname)s::%(message)s', '%H:%M:%S')
     handler.setFormatter(formatter)
@@ -83,19 +83,23 @@ def checkFolder(folderpath):
             raise SystemExit("Unable to create '%s'" % folderpath)
     
     if not os.access(folderpath, os.W_OK):
-        raise SystemExit("Folder '%s' must be writable " % folderpath)
+        pass
+        #raise SystemExit("Folder '%s' must be writable " % folderpath)
     
 try:
     settings
 except NameError:
+    import os, sys
+    #_base_dir = os.path.realpath('.')
+    _base_dir = os.path.dirname(sys.argv[0])
+     
     _config_log()
     _args = _parse_args()
-
-    _base_dir = os.path.realpath('.')
+   
     _config_file = _args.config if _args.config else os.path.join(os.path.join(_base_dir, 'etc'), 'config.ini')
     
     _default_settings(_base_dir)
-        
+    
     if os.path.isfile(_config_file):
         _load_settings(_config_file)
     else:

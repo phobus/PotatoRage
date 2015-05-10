@@ -27,8 +27,8 @@ if __name__ == "__main__":
         log.info("Setting up application.")
         import api, routes, controllers
         log.info("Serving requests.")
-    
-    """run(port=settings['server']['port'],
+
+    run(port=settings['server']['port'],
         host=settings['server']['host'],
         debug=settings['server']['debug'],
-        reloader=settings['server']['reloader'])"""
+        reloader=settings['server']['reloader'])

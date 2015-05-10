@@ -15,7 +15,7 @@ def _dict_factory(cursor, row):
 
 def create_con():
     log.debug('Create connection %s' % settings['files']['db'])
-    con = sqlite3.connect(settings['files']['db'])
+    con = sqlite3.connect(settings['files']['db'], check_same_thread=False)
     con.row_factory = _dict_factory 
     return con
 

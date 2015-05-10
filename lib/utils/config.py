@@ -65,8 +65,8 @@ def _check_config():
 def _config_log():
     import logging
     logger = logging.getLogger()
-    #handler = logging.StreamHandler()
-    handler = logging.FileHandler('/home/neganix/git/Pyster/log/pyster.log')
+    handler = logging.StreamHandler()
+    #handler = logging.FileHandler('/opt/Pyster/log/pyster.log')
     
     formatter = logging.Formatter(u'%(asctime)s %(levelname)s::%(message)s', '%H:%M:%S')
     handler.setFormatter(formatter)
@@ -84,13 +84,13 @@ def checkFolder(folderpath):
     
     if not os.access(folderpath, os.W_OK):
         pass
-        #raise SystemExit("Folder '%s' must be writable " % folderpath)
+        # raise SystemExit("Folder '%s' must be writable " % folderpath)
     
 try:
     settings
 except NameError:
     import os, sys
-    #_base_dir = os.path.realpath('.')
+    # _base_dir = os.path.realpath('.')
     _base_dir = os.path.dirname(sys.argv[0])
      
     _config_log()
@@ -111,5 +111,9 @@ except NameError:
     
     if _args.port:
         settings['server']['port'] = _args.port
+    
+    """import bottle
+    bottle.TEMPLATE_PATH.append(os.path.join(_base_dir, 'views'))
+    print bottle.TEMPLATE_PATH"""
     
     _check_config()
